@@ -1,49 +1,57 @@
 ```mermaid
 gantt
-    title GANTT – App TEA | Proyecto UCC | Mar → Nov 2026
+    title GANTT – App TEA | Proyecto UCC
     dateFormat  YYYY-MM-DD
     axisFormat  %d/%m
 
-    section FASE COMÚN
-    Selección de temas y formación del equipo :2026-03-19, 2026-03-25
-    Entrevista con Fonoaudióloga              :milestone, 2026-03-26, 0d
-    Entrevista con Psicóloga                  :milestone, 2026-03-30, 0d
-    Reunión con Débora                        :milestone, 2026-04-03, 0d
-    Armado Anteproyecto (AP)                  :2026-04-06, 2026-04-15
-    Entrega Anteproyecto                      :milestone, 2026-04-16, 0d
+    section FASE INICIAL
+    Selección de tema y equipo      :a1, 2026-03-19, 6d
+    Entrevistas profesionales       :a2, after a1, 8d
+    Armado anteproyecto             :a3, after a2, 10d
+    Entrega anteproyecto            :milestone, after a3, 0d
 
-    section FASE VARIABLE
-    Investigación TEA – bibliografía         :2026-04-17, 2026-04-30
-    Análisis de requerimientos               :2026-04-17, 2026-04-30
-    Reunión docente Débora Theaux            :milestone, 2026-04-20, 0d
-    Criterios de accesibilidad y estímulos   :2026-05-01, 2026-05-07
-    Diseño arquitectura microservicios       :2026-05-01, 2026-05-14
-    Diagramas de arquitectura (C4)           :2026-05-08, 2026-05-14
-    Definición de tecnología / stack         :2026-05-08, 2026-05-14
-    Formación en tecnologías elegidas        :2026-05-15, 2026-05-25
-    Repositorio / CI-CD pipeline             :2026-05-26, 2026-05-28
-    Entornos: dev / staging / prod           :2026-05-26, 2026-05-28
-    Diseño UX – wireframes                   :2026-05-26, 2026-06-08
-    Mocks / prototipos interactivos          :2026-05-29, 2026-06-11
-    Revisión mocks con docente               :milestone, 2026-06-02, 0d
-    Módulo: Autenticación y perfiles         :2026-06-02, 2026-06-22
-    Módulo: Desarrollo de juegos educativos  :2026-06-02, 2026-07-06
-    Módulo: Adaptación / configuración       :2026-06-23, 2026-07-06
-    MESA DE EXÁMENES – pausa                 :crit, 2026-07-07, 2026-07-20
-    Módulo: Registro de progreso             :2026-07-07, 2026-07-20
-    Panel de seguimiento (padres/prof.)      :2026-07-21, 2026-08-03
-    Check 1 de avances – 4/8                 :milestone, 2026-08-04, 0d
+    section ANÁLISIS E INVESTIGACIÓN
+    Investigación TEA               :b1, after a3, 10d
+    Análisis de requerimientos      :b2, after a3, 10d
+    Criterios accesibilidad         :b3, after b1, 7d
+
+    section ARQUITECTURA Y TECNOLOGÍA
+    Diseño arquitectura             :c1, after b2, 10d
+    Diagramas (C4)                  :c2, after c1, 7d
+    Definición de tecnologías       :c3, after c1, 7d
+    Formación tecnologías           :c4, after c3, 10d
+
+    section PREPARACIÓN TÉCNICA
+    Repo + branching + CI/CD        :d1, after c3, 3d
+    Entornos (dev/staging/prod)     :d2, after d1, 3d
+
+    section DISEÑO UX/UI
+    Wireframes                      :e1, after c3, 10d
+    Mocks interactivos              :e2, after e1, 10d
+    Validación con docente          :milestone, after e2, 0d
+
+    section DESARROLLO (SPRINTS)
+    Autenticación y perfiles        :f1, after c4, 14d
+    Juegos educativos               :f2, after c4, 21d
+    Configuración adaptativa        :f3, after f1, 10d
+
+    section PAUSA ACADÉMICA
+    Mesa de exámenes                :crit, after f2, 14d
+
+    section DESARROLLO AVANZADO
+    Registro de progreso            :g1, after f3, 10d
+    Panel padres/docentes           :g2, after g1, 10d
+    Checkpoint avance               :milestone, after g2, 0d
 
     section TESTING
-    Plan de testing y casos de prueba        :2026-07-21, 2026-07-27
-    Testing unitario e integración           :2026-08-04, 2026-08-17
-    Testing accesibilidad / TEA              :2026-08-18, 2026-08-31
-    Testing end-to-end y regresión           :2026-09-01, 2026-09-07
-    Bug fixing sprint                        :2026-09-08, 2026-09-14
+    Plan de testing                 :h1, after g2, 7d
+    Testing integración             :h2, after h1, 10d
+    Testing accesibilidad TEA       :h3, after h2, 10d
+    Testing end-to-end              :h4, after h3, 7d
+    Bug fixing                     :h5, after h4, 7d
 
     section CIERRE
-    80% avance – demo interna                :2026-09-15, 2026-09-28
-    Informe: Diagnóstico / Marco Teórico     :2026-09-29, 2026-10-19
-    Ajustes finales y pulido UX/UI           :2026-10-20, 2026-11-02
-    Check 2 de avances – 3/11                :milestone, 2026-11-03, 0d
-    Entrega final / Presentación             :milestone, 2026-11-03, 0d
+    Demo interna (80%)              :i1, after h5, 10d
+    Documentación final             :i2, after i1, 15d
+    Ajustes finales UX/UI           :i3, after i2, 10d
+    Entrega final                   :milestone, after i3, 0d
