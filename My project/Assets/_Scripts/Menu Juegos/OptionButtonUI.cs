@@ -11,18 +11,18 @@ using TMPro;
 public class OptionButtonUI : MonoBehaviour
 {
     [SerializeField] private Image icono;
-    [SerializeField] private Text nombreTexto;
+    [SerializeField] private Image nombre;
     [SerializeField] private Button boton;
     [SerializeField] private GameObject marcoSeleccionado; // borde/highlight, se prende al elegirlo
 
     /// <summary>Identificador de la opción (ej: "Facil", o el nombre de la temática).</summary>
     public string Id { get; private set; }
 
-    public void Configurar(string id, string nombre, Sprite sprite, Action<string> onElegido)
+    public void Configurar(string id, Sprite nombresprite, Sprite sprite, Action<string> onElegido)
     {
         Id = id;
         if (icono != null) icono.sprite = sprite;
-        if (nombreTexto != null) nombreTexto.text = nombre;
+        if (nombre != null) nombre.sprite = nombresprite;
 
         boton.onClick.RemoveAllListeners();
         boton.onClick.AddListener(() => onElegido(Id));

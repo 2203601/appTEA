@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Memoria
   m_EditorClassIdentifier: Assembly-CSharp::GameData
   gameId: Memoria
-  titulo: Memoria
+  titulo: {fileID: -1530270011, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   descripcion: Busca Los Pares !
   icono: {fileID: 21300000, guid: 73d87bc3a27171144985c68fbbd54380, type: 3}
   colorTema: {r: 0, g: 0, b: 0, a: 1}
@@ -21,8 +21,11 @@ MonoBehaviour:
   tematicas:
   - nombre: Paises
     icono: {fileID: -1072392798, guid: 81d9243a620704aa1ba2eb152107bdf1, type: 3}
+    nombreSprite: {fileID: 1807664850, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   - nombre: Animales
     icono: {fileID: -2089851446, guid: 81d9243a620704aa1ba2eb152107bdf1, type: 3}
+    nombreSprite: {fileID: -1395464820, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   - nombre: Comida
     icono: {fileID: -87663581, guid: 81d9243a620704aa1ba2eb152107bdf1, type: 3}
+    nombreSprite: {fileID: -705995292, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   sceneName: JuegoMemoria

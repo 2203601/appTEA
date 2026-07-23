@@ -19,6 +19,9 @@ public class TemaOpcion
 {
     public string nombre;
     public Sprite icono;
+    public Sprite nombreSprite;
+
+    
 }
 
 /// <summary>
@@ -30,7 +33,7 @@ public class GameData : ScriptableObject
 {
     [Header("Info general")]
     public string gameId;          // identificador único, ej: "memoria"
-    public string titulo;          // ej: "Memoria"
+    public Sprite titulo;          // ej: "Memoria"
     [TextArea] public string descripcion; // ej: "Encuentra los pares"
     public Sprite icono;
     public Color colorTema = Color.white;

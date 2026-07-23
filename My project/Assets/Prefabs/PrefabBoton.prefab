@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4515885911021388171}
   - component: {fileID: 2431851118524288556}
-  - component: {fileID: 5889740699376766736}
+  - component: {fileID: 8944906101664370365}
   m_Layer: 0
   m_Name: Nombre
   m_TagString: Untagged
@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5.6557, y: 81.8}
-  m_SizeDelta: {x: -2.4482, y: -75}
+  m_AnchoredPosition: {x: -2.216, y: 107.4304}
+  m_SizeDelta: {x: -59.282, y: -91.9081}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2431851118524288556
 CanvasRenderer:
@@ -120,7 +120,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 936525901988078373}
   m_CullTransparentMesh: 1
---- !u!114 &5889740699376766736
+--- !u!114 &8944906101664370365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,31 +129,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 936525901988078373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 12800000, guid: d5463b162cafe4dcfa87a197d6e279d8, type: 3}
-    m_FontSize: 12
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 300
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: kkkk
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1745614795112573986
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,8 +263,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -11.4975, y: 10.483}
+  m_SizeDelta: {x: 122.995, y: 120.9661}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3401508760724931352
 MonoBehaviour:
@@ -283,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionButtonUI
   icono: {fileID: 7280838765665945327}
-  nombreTexto: {fileID: 5889740699376766736}
+  nombre: {fileID: 8944906101664370365}
   boton: {fileID: 1527903614602743041}
   marcoSeleccionado: {fileID: 891729050167420687}
 --- !u!114 &1527903614602743041

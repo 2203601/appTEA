@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -14,7 +13,7 @@ public class DifficultyModalUI : MonoBehaviour
 {
     [Header("Referencias generales")]
     [SerializeField] private GameObject panelRaiz;   // panel completo, incluye el fondo oscuro
-    [SerializeField] private Text tituloJuegoTexto;
+    [SerializeField] private Image tituloJuego; // el logo/título del juego como sprite, no texto
 
     [Header("Dificultad (dinámica, siempre visible)")]
     [SerializeField] private Transform dificultadContainer;
@@ -22,6 +21,9 @@ public class DifficultyModalUI : MonoBehaviour
     [SerializeField] private Sprite iconoFacil;
     [SerializeField] private Sprite iconoMedio;
     [SerializeField] private Sprite iconoDificil;
+    [SerializeField] private Sprite nombreFacilSprite;   // la palabra "Fácil" dibujada, ej. cartel/etiqueta
+    [SerializeField] private Sprite nombreMedioSprite;
+    [SerializeField] private Sprite nombreDificilSprite;
 
     [Header("Temática (dinámica, solo si el juego la usa)")]
     [SerializeField] private GameObject seccionTematica;      // contenedor a activar/desactivar
@@ -50,7 +52,7 @@ public class DifficultyModalUI : MonoBehaviour
     {
         juegoSeleccionado = juego;
 
-        if (tituloJuegoTexto != null) tituloJuegoTexto.text = juego.titulo;
+        if (tituloJuego != null) tituloJuego.sprite = juego.titulo;
 
         GenerarBotonesDificultad();
         dificultadSeleccionada = Difficulty.Facil; // preseleccionada por defecto
@@ -74,15 +76,15 @@ public class DifficultyModalUI : MonoBehaviour
     {
         LimpiarLista(botonesDificultad);
 
-        AgregarBotonDificultad(Difficulty.Facil, "Fácil", iconoFacil);
-        AgregarBotonDificultad(Difficulty.Medio, "Medio", iconoMedio);
-        AgregarBotonDificultad(Difficulty.Dificil, "Difícil", iconoDificil);
+        AgregarBotonDificultad(Difficulty.Facil, nombreFacilSprite, iconoFacil);
+        AgregarBotonDificultad(Difficulty.Medio, nombreMedioSprite, iconoMedio);
+        AgregarBotonDificultad(Difficulty.Dificil, nombreDificilSprite, iconoDificil);
     }
 
-    private void AgregarBotonDificultad(Difficulty dificultad, string nombre, Sprite icono)
+    private void AgregarBotonDificultad(Difficulty dificultad, Sprite nombreSprite, Sprite icono)
     {
         OptionButtonUI instancia = Instantiate(opcionBotonPrefab, dificultadContainer);
-        instancia.Configurar(dificultad.ToString(), nombre, icono, _ => OnDificultadElegida(dificultad));
+        instancia.Configurar(dificultad.ToString(), nombreSprite, icono, _ => OnDificultadElegida(dificultad));
         botonesDificultad.Add(instancia);
     }
 
@@ -107,7 +109,7 @@ public class DifficultyModalUI : MonoBehaviour
         foreach (TemaOpcion tema in juego.tematicas)
         {
             OptionButtonUI instancia = Instantiate(opcionBotonPrefab, tematicaContainer);
-            instancia.Configurar(tema.nombre, tema.nombre, tema.icono, OnTemaElegido);
+            instancia.Configurar(tema.nombre, tema.nombreSprite, tema.icono, OnTemaElegido);
             botonesTema.Add(instancia);
         }
     }
