@@ -9,6 +9,7 @@ using TMPro;
 /// (el GameObject ES el botón; el script no referencia un botón aparte).
 /// Al tocarla, abre el modal de dificultad para ese juego.
 /// </summary>
+/// /// 
 [RequireComponent(typeof(Button))]
 public class GameCardUI : MonoBehaviour
 {

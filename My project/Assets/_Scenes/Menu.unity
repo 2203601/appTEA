@@ -195,14 +195,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.066037714, g: 0.03956033, b: 0.03956033, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b6f88350c63b24a4abdb197bf2e86d7a, type: 3}
+  m_Sprite: {fileID: -852142876, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -234,10 +234,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 842586738}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 233.99, y: -215}
-  m_SizeDelta: {x: 134.65, y: 100.02}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 358, y: -231}
+  m_SizeDelta: {x: -1180.78, y: -633.16003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &326324580
 GameObject:
@@ -593,8 +593,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -278, y: -72}
-  m_SizeDelta: {x: 489.99, y: 212.69}
+  m_AnchoredPosition: {x: -281, y: 0}
+  m_SizeDelta: {x: 262.93, y: 144.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &566602655
 MonoBehaviour:
@@ -616,8 +616,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 10, y: 10}
+  m_CellSize: {x: 100, y: 125}
+  m_Spacing: {x: 15, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!1 &842586737
@@ -636,7 +636,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &842586738
 RectTransform:
   m_ObjectHideFlags: 0
@@ -678,9 +678,9 @@ MonoBehaviour:
   tituloJuegoTexto: {fileID: 1293672493}
   dificultadContainer: {fileID: 2002541747}
   opcionBotonPrefab: {fileID: 3401508760724931352, guid: 1c2c9cfecee63469a8894bed6d0cd3c2, type: 3}
-  iconoFacil: {fileID: 21300000, guid: ff86bbc2214e24140a62d095a9dff2a9, type: 3}
-  iconoMedio: {fileID: 21300000, guid: 2700a71a4bb284d9599cfaa2d3f939aa, type: 3}
-  iconoDificil: {fileID: 21300000, guid: 5f82876d897534183bac03356c6140fa, type: 3}
+  iconoFacil: {fileID: 671589743, guid: 942b279158e0746e486b53168151398d, type: 3}
+  iconoMedio: {fileID: -1783836268, guid: 942b279158e0746e486b53168151398d, type: 3}
+  iconoDificil: {fileID: 2038944911, guid: 942b279158e0746e486b53168151398d, type: 3}
   seccionTematica: {fileID: 1700067970}
   tematicaContainer: {fileID: 566602654}
   botonJugar: {fileID: 1628743739}
@@ -780,7 +780,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 83, y: -393.93}
+  m_AnchoredPosition: {x: 89, y: -393.93}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &943911067
@@ -803,7 +803,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9e60047ccc6b8422193b170d51796ed2, type: 3}
+  m_Sprite: {fileID: 57712869, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -975,7 +975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 978, y: -393.93}
+  m_AnchoredPosition: {x: 926, y: -393.93}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1167927258
@@ -998,7 +998,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: be2e0deab40f1478a99038fcbc19219d, type: 3}
+  m_Sprite: {fileID: -1530270011, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1094,8 +1094,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -5.0178, y: 167}
-  m_SizeDelta: {x: 61.052, y: 21.244}
+  m_AnchoredPosition: {x: 0, y: 173.35}
+  m_SizeDelta: {x: 61.05, y: 16.91}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1293672492
 CanvasRenderer:
@@ -1306,8 +1306,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -124, y: -214.78003}
-  m_SizeDelta: {x: -1103.4, y: -619.36}
+  m_AnchoredPosition: {x: 241, y: -231}
+  m_SizeDelta: {x: -1180.78, y: -633.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1628743737
 MonoBehaviour:
@@ -1329,7 +1329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7a0568d5e3330b84687e307992be3030, type: 3}
+  m_Sprite: {fileID: -700715023, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1477,8 +1477,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -65.599976, y: -106.109985}
+  m_AnchoredPosition: {x: 0, y: -10.230011}
+  m_SizeDelta: {x: -65.6, y: -85.64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1660028714
 MonoBehaviour:
@@ -1951,8 +1951,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 270.5, y: -72}
-  m_SizeDelta: {x: 489.99, y: 212.69}
+  m_AnchoredPosition: {x: -281, y: -253.57}
+  m_SizeDelta: {x: 187.24, y: 212.69}
   m_Pivot: {x: 0.5, y: 0.49999994}
 --- !u!114 &2002541748
 MonoBehaviour:
@@ -1974,8 +1974,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 10, y: 10}
+  m_CellSize: {x: 100, y: 125}
+  m_Spacing: {x: 15, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 3
 --- !u!114 &2002541749

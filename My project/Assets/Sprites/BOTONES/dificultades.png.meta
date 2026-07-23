@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c68c5bb66350b40b9be44cea7af075f0
+guid: 942b279158e0746e486b53168151398d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -46,10 +46,10 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.48409873, y: 0.92403346}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 164, y: 1218, z: 211, w: 9}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: amancay
+      name: dificultades_facil
       rect:
         serializedVersion: 2
-        x: 171
-        y: 1218
-        width: 1027
-        height: 182
+        x: 88
+        y: 886
+        width: 212
+        height: 296
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,96 +125,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5dc983a5912954d41b48c0408bf964cc
-      internalID: 1140907645
+      spriteID: 6b93a40ac74e3400291c57ab74fc7073
+      internalID: 671589743
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: anterior
+      name: dificultades_media
       rect:
         serializedVersion: 2
-        x: 93
-        y: 972
-        width: 242
-        height: 195
+        x: 346
+        y: 882
+        width: 212
+        height: 296
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f3497df21410a4c998068ff228db062b
-      internalID: 57712869
+      spriteID: ec287ea9c4e6748ab9d585db1469eb8f
+      internalID: -1783836268
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: siguiente
+      name: dificultades_dificil
       rect:
         serializedVersion: 2
-        x: 383
-        y: 967
-        width: 250
-        height: 203
+        x: 621
+        y: 874
+        width: 212
+        height: 296
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55b8dff5cac724fcca25016a4b89b339
-      internalID: -1530270011
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: jugar
-      rect:
-        serializedVersion: 2
-        x: 84
-        y: 702
-        width: 260
-        height: 206
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8b27e5215de7e40e380c08663dbfaa95
-      internalID: -700715023
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: salir
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 706
-        width: 244
-        height: 201
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7977769770a54f5a971f1575c665b58
-      internalID: -852142876
+      spriteID: 79aa5cfcc0c9a45a2921bacaadb39559
+      internalID: 2038944911
       vertices: []
       indices: 
       edges: []
@@ -223,8 +179,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 4bad1a4df18ec46a9b644e0a5a2c6293
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -232,16 +188,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries:
-      - key: SpriteEditor.SliceOnImport
-        value: False
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      amancay: 1140907645
-      anterior: 57712869
-      jugar: -700715023
-      salir: -852142876
-      siguiente: -1530270011
+      dificultades_dificil: 2038944911
+      dificultades_facil: 671589743
+      dificultades_media: -1783836268
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
