@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,16 @@ public class MemoriaGameManager : MonoBehaviour
     // variable global
     public static Color SELECTED_COLOR = Color.white;
     public static Category SELECTED_CATEGORY = Category.comida;
-    // referencia al componente sprite renderer 
+
+    // cantidad de pares según la dificultad elegida en el menú (GameSession.SelectedDifficulty)
+    private static readonly Dictionary<Difficulty, int> PARES_POR_DIFICULTAD = new Dictionary<Difficulty, int>
+    {
+        { Difficulty.Facil, 4 },
+        { Difficulty.Medio, 6 },
+        { Difficulty.Dificil, 8 },
+    };
+
+    // referencia al componente sprite renderer
     public SpriteRenderer fondoSpriteRenderer;
     public Text couplesTextComponent;
 
@@ -27,6 +37,7 @@ public class MemoriaGameManager : MonoBehaviour
 
     int totalCouples;
     int currentCouples = 0;
+    int paresObjetivo;
 
 
     // tiempo
@@ -42,6 +53,21 @@ public class MemoriaGameManager : MonoBehaviour
 
         allCards = Resources.LoadAll<CardInfo>("Cartas");
 
+        // --- Leemos lo elegido en el menú (seteado por DifficultyModalUI.Confirmar) ---
+
+        // Temática: el nombre que viene de GameSession.SelectedTema ("Comida", "Animales", "Paises")
+        // matchea directo con los valores del enum Category (comida, animales, paises), sin
+        // distinguir mayúsculas/minúsculas. Si no matchea nada (o vino null), se mantiene
+        // el valor por defecto ya asignado arriba (Category.comida).
+        if (Enum.TryParse(GameSession.SelectedTema, true, out Category categoriaElegida))
+        {
+            SELECTED_CATEGORY = categoriaElegida;
+        }
+
+        // Dificultad: cuántos pares se van a jugar.
+        paresObjetivo = PARES_POR_DIFICULTAD.TryGetValue(GameSession.SelectedDifficulty, out int pares)
+            ? pares
+            : 6; // valor de resguardo por si no hay selección
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -49,23 +75,38 @@ public class MemoriaGameManager : MonoBehaviour
         // cambiamos el color
         fondoSpriteRenderer.color = SELECTED_COLOR;
         CreateGrid();
-       
+
     }
 
 
     void CreateGrid()
     {
+        // filtramos solo las cartas de la temática elegida
+        List<CardInfo> disponibles = new List<CardInfo>();
         foreach (CardInfo card in allCards)
         {
             if (card.cardCategory == SELECTED_CATEGORY)
             {
-                totalCouples++; 
-                for (int i = 0; i < 2; i++)
-                {
-                    ordererCardList.Add(card);
-
-                }
+                disponibles.Add(card);
             }
+        }
+
+        // barajamos esas cartas (Fisher-Yates)
+        for (int i = disponibles.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            CardInfo temp = disponibles[i];
+            disponibles[i] = disponibles[j];
+            disponibles[j] = temp;
+        }
+
+        // nos quedamos con tantos pares como pida la dificultad (o menos, si no hay suficientes cartas de esa temática)
+        totalCouples = Mathf.Min(paresObjetivo, disponibles.Count);
+
+        for (int i = 0; i < totalCouples; i++)
+        {
+            ordererCardList.Add(disponibles[i]);
+            ordererCardList.Add(disponibles[i]);
         }
 
         DisplayCouple();
@@ -75,7 +116,7 @@ public class MemoriaGameManager : MonoBehaviour
             int randomIndex;
             CardInfo selectedCardInfo;
 
-            randomIndex = Random.Range(0, ordererCardList.Count); // 0 a 20
+            randomIndex = UnityEngine.Random.Range(0, ordererCardList.Count); // 0 a 20
             selectedCardInfo = ordererCardList[randomIndex];
 
             randomCardList.Add(selectedCardInfo);
@@ -118,7 +159,7 @@ public class MemoriaGameManager : MonoBehaviour
         {
             Invoke("TurnWrongCard", 1.5f);
         }
-        
+
     }
     void DisplayCouple()
     {
@@ -131,7 +172,7 @@ public class MemoriaGameManager : MonoBehaviour
         {
             cardSelected.ActivateAnimator();
         }
-            
+
         selectedCards.Clear();
         Card.FLIPPED_CARD = 0;
     }

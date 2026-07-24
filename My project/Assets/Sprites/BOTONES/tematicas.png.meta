@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c68c5bb66350b40b9be44cea7af075f0
+guid: 81d9243a620704aa1ba2eb152107bdf1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -46,10 +46,10 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.48409873, y: 0.92403346}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 164, y: 1218, z: 211, w: 9}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: amancay
+      name: tematica_animales
       rect:
         serializedVersion: 2
-        x: 171
-        y: 1218
-        width: 1027
-        height: 182
+        x: 88
+        y: 886
+        width: 212
+        height: 296
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,20 +125,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5dc983a5912954d41b48c0408bf964cc
-      internalID: 1140907645
+      spriteID: 77a35a7911e2d413586bb7e412fe06fa
+      internalID: -2089851446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: titulo_memoria
+      name: tematicas_paises
       rect:
         serializedVersion: 2
-        x: 9
-        y: 931
-        width: 1388
-        height: 239
+        x: 346
+        y: 882
+        width: 212
+        height: 296
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,20 +147,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55b8dff5cac724fcca25016a4b89b339
-      internalID: -1530270011
+      spriteID: dc884436223874afda5d18ed855e2a59
+      internalID: -1072392798
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: titulo_paises
+      name: tematicas_comida
       rect:
         serializedVersion: 2
-        x: 34
-        y: 641
-        width: 869
-        height: 225
+        x: 622
+        y: 874
+        width: 212
+        height: 296
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,52 +169,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8bf96a1980e3f47b89403dc2a36da5c4
-      internalID: 1807664850
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: titulo_comida
-      rect:
-        serializedVersion: 2
-        x: 19
-        y: 368
-        width: 1031
-        height: 216
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bfdfb5abd42c0403bb1430ce9d5b07b2
-      internalID: -705995292
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: titulo_animales
-      rect:
-        serializedVersion: 2
-        x: 12
-        y: 171
-        width: 1033
-        height: 191
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 063ee23d5d14d4b588f9c50d968bdbde
-      internalID: -1395464820
+      spriteID: 8cf2b66c36dc3464a9688a2427ca890f
+      internalID: -87663581
       vertices: []
       indices: 
       edges: []
@@ -223,8 +179,8 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: bce53db756c104a2abf374b314d11659
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -232,19 +188,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries:
-      - key: SpriteEditor.SliceOnImport
-        value: False
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      amancay: 1140907645
-      anterior: 57712869
-      jugar: -700715023
-      salir: -852142876
-      titulo_animales: -1395464820
-      titulo_comida: -705995292
-      titulo_memoria: -1530270011
-      titulo_paises: 1807664850
+      tematica_animales: -2089851446
+      tematicas_comida: -87663581
+      tematicas_paises: -1072392798
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
