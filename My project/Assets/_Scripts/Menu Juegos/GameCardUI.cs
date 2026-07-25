@@ -23,6 +23,9 @@ public class GameCardUI : MonoBehaviour
     private GameData data;
     private DifficultyModalUI modal;
 
+
+    private Button botonHome;
+
     private void Awake()
     {
         boton = GetComponent<Button>();
@@ -44,6 +47,9 @@ public class GameCardUI : MonoBehaviour
 
     private void OnCardClicked()
     {
+    
+
         modal.Abrir(data);
     }
+    
 }

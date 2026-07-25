@@ -13,6 +13,9 @@ public class DifficultyModalUI : MonoBehaviour
 {
     [Header("Referencias generales")]
     [SerializeField] private GameObject panelRaiz;   // panel completo, incluye el fondo oscuro
+
+    [SerializeField] private GameObject panelMenu;   // panel completo
+
     [SerializeField] private Image tituloJuego; // el logo/título del juego como sprite, no texto
 
     [Header("Dificultad (dinámica, siempre visible)")]
@@ -45,11 +48,13 @@ public class DifficultyModalUI : MonoBehaviour
         botonJugar.onClick.AddListener(Confirmar);
         botonCerrar.onClick.AddListener(Cerrar);
 
-        panelRaiz.SetActive(false);
+        // panelRaiz.SetActive(false);
     }
 
     public void Abrir(GameData juego)
     {
+        Debug.Log("Abrir modal");
+
         juegoSeleccionado = juego;
 
         if (tituloJuego != null) tituloJuego.sprite = juego.titulo;
@@ -70,12 +75,18 @@ public class DifficultyModalUI : MonoBehaviour
         }
 
         panelRaiz.SetActive(true);
+        Debug.Log(panelRaiz.activeSelf);
+        Debug.Log(panelRaiz.activeInHierarchy);
+
+        panelMenu.SetActive(false);
     }
 
     private void GenerarBotonesDificultad()
     {
-        LimpiarLista(botonesDificultad);
-
+        if (botonesDificultad.Count > 0){
+                return;
+        }
+        
         AgregarBotonDificultad(Difficulty.Facil, nombreFacilSprite, iconoFacil);
         AgregarBotonDificultad(Difficulty.Medio, nombreMedioSprite, iconoMedio);
         AgregarBotonDificultad(Difficulty.Dificil, nombreDificilSprite, iconoDificil);
@@ -118,6 +129,7 @@ public class DifficultyModalUI : MonoBehaviour
     {
         temaSeleccionado = nombreTema;
         ActualizarSeleccionTematica();
+
     }
 
     private void ActualizarSeleccionTematica()
@@ -140,6 +152,8 @@ public class DifficultyModalUI : MonoBehaviour
     public void Cerrar()
     {
         panelRaiz.SetActive(false);
+        panelMenu.SetActive(true);
+
         juegoSeleccionado = null;
     }
 

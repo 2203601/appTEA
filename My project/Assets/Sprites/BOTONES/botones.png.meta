@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: botones_anterior
+      name: botones_0
       rect:
         serializedVersion: 2
         x: 96
@@ -125,14 +125,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8961f163e94f744d9871d6c908833d41
-      internalID: 1065773883
+      spriteID: 02d174e8d2cfc4f3695934362d3f3f0c
+      internalID: 794745185
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: botones_siguiente
+      name: botones_1
       rect:
         serializedVersion: 2
         x: 390
@@ -147,17 +147,61 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7f956bb56ff694e6f93d5d3278d80a78
-      internalID: -1280210295
+      spriteID: e0733c99a00a8418c8313dd862c2f9dd
+      internalID: -466478042
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: botones_jugar
+      name: botones_home
       rect:
         serializedVersion: 2
-        x: 95
+        x: 715
+        y: 969
+        width: 240
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9a651d5c016a482586f25c3ce89361d
+      internalID: -1490541978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botones_config
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 967
+        width: 240
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec8393c6daf2245d0ab9208d11bd828c
+      internalID: 820939426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botones_4
+      rect:
+        serializedVersion: 2
+        x: 93
         y: 710
         width: 240
         height: 192
@@ -169,14 +213,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9871c77b9451242359bfcc9856cdf993
-      internalID: -377766624
+      spriteID: 307da321eeef94236b93749b49c7ad5f
+      internalID: -559207757
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: botones_salir
+      name: botones_5
       rect:
         serializedVersion: 2
         x: 387
@@ -191,8 +235,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0b4b37c506eb64dc3b9fdf1f47666acb
-      internalID: -1151140237
+      spriteID: 672013093002040aa8ade4dc2c8c942b
+      internalID: 747735541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botones_6
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 663
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0672f86e24f574c67960b8e777b9f426
+      internalID: 1875095102
       vertices: []
       indices: 
       edges: []
@@ -213,10 +279,13 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      botones_anterior: 1065773883
-      botones_jugar: -377766624
-      botones_salir: -1151140237
-      botones_siguiente: -1280210295
+      botones_0: 794745185
+      botones_1: -466478042
+      botones_4: -559207757
+      botones_5: 747735541
+      botones_6: 1875095102
+      botones_config: 820939426
+      botones_home: -1490541978
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

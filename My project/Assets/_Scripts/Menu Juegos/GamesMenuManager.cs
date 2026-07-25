@@ -18,6 +18,7 @@ public class GamesMenuManager : MonoBehaviour
     [SerializeField] private int juegosPorPagina = 3;
     [SerializeField] private Button botonAnterior;
     [SerializeField] private Button botonSiguiente;
+    
 
     [Header("Referencias")]
     [SerializeField] private Transform gridContainer;      // objeto con Grid/Horizontal Layout Group
