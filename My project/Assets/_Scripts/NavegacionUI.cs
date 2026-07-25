@@ -11,10 +11,10 @@ public class NavegacionUI : MonoBehaviour
         SceneManager.LoadScene("CrearCuenta");
     }
  
-    // Boton "Recuperar contrasena" (escena IniciarSesion)
-   // public void IrARecuperarContrasena()
-   // {
-     //   SceneManager.LoadScene("NombreEscenaRecovery"); // reemplazar por el nombre real
-    //}
+     public void IrAInicio()
+    {
+        SceneManager.LoadScene("INICIO");
+    }
+ 
  
 }
