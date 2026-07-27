@@ -16,7 +16,7 @@ public class DifficultyModalUI : MonoBehaviour
 
     [SerializeField] private GameObject panelMenu;   // panel completo
 
-    [SerializeField] private Image tituloJuego; // el logo/título del juego como sprite, no texto
+    [SerializeField] private Text tituloJuego; // el logo/título del juego como sprite, no texto
 
     [Header("Dificultad (dinámica, siempre visible)")]
     [SerializeField] private Transform dificultadContainer;
@@ -57,7 +57,7 @@ public class DifficultyModalUI : MonoBehaviour
 
         juegoSeleccionado = juego;
 
-        if (tituloJuego != null) tituloJuego.sprite = juego.titulo;
+        if (tituloJuego != null) tituloJuego.text = juego.titulo;
 
         GenerarBotonesDificultad();
         dificultadSeleccionada = Difficulty.Facil; // preseleccionada por defecto

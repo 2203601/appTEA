@@ -4,57 +4,66 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+ 
 public class GameManagerEmocion : MonoBehaviour
 {
     [Header("Datos")]
     [Tooltip("Carpeta dentro de Assets/Resources/ de donde se cargan los EmocionInfo")]
     public string carpetaEmociones = "Emociones";
-
+ 
     // Se llena solo en Awake() leyendo Assets/Resources/<carpetaEmociones>.
     // No hace falta arrastrar nada a mano en el Inspector.
     List<EmocionInfo> todasLasEmociones;
-
+ 
     [Header("Referencias de escena")]
     public Emocion tarjetaObjetivo;         // el emoji grande a adivinar
     public Transform contenedorOpciones;    // objeto vacío con Grid Layout Group
     public OpcionEmocion opcionPrefab;      // prefab del botón de respuesta
     public Text feedbackText;               // texto tipo "¡Correcto!" / "Intentá de nuevo"
     public Text rondaText;                  // opcional: "Ronda 1/4"
-
-
+ 
+ 
     [Header("Config")]
-    public int cantidadOpciones = 4;
+ 
     public int totalRondas = 4;
     public float delayEntreRondas = 1.2f;
-
-
+ 
+    int opcionesObjetivo;
+ 
+    // cantidad de opciones según la dificultad elegida en el menú (GameSession.SelectedDifficulty)
+    private static readonly Dictionary<Difficulty, int> opcionesPorDificultad = new Dictionary<Difficulty, int>
+    {
+        { Difficulty.Facil, 3 },
+        { Difficulty.Medio, 6 },
+    };
+ 
     // frases que se eligen al azar
-
+ 
     public string[] frasesCorrecto ={
-        "Muy bien!",
-        "Excelente!",
-        "Así es!",
+        "Correcto ! Muy bien!",
+        "Excelente! Sigue así!",
+        "Así es! ",
         "Genial!"
-
+ 
     };
     public string[] frasesReintentar ={
-            "Intentá de nuevo",
-            "Casi, proba otra vez",
+            "Intentá de nuevo, vos podes!",
+            "Casi, proba otra vez!",
             "No es esa, cuál será?",
-            "Ups, elegí otra opción"
-
+            "Ups, elegí otra opción!"
+ 
     };
-
+ 
     [Tooltip("Usa {0} donde va el nombre de la emoción correcta")]
     public string[] frasesRevelar ={
-        "Era {0}",
         "La respuesta correcta era {0}",
         "Esta vez era {0}",
-
+        "Tranquilo, la próxima la sacás. Era {0}",
+        "¡Buen intento! Era {0}"
+ 
     };
-
-
+ 
+ 
     EmocionInfo emocionActual;
     List<OpcionEmocion> opcionesActuales = new List<OpcionEmocion>();
     int rondaActual;
@@ -63,6 +72,10 @@ public class GameManagerEmocion : MonoBehaviour
  
     void Awake()
     {
+        opcionesObjetivo = opcionesPorDificultad.TryGetValue(GameSession.SelectedDifficulty, out int opciones)
+            ? opciones
+            : 4; // valor de resguardo por si no hay selección
+ 
         CargarEmociones();
     }
  
@@ -76,10 +89,10 @@ public class GameManagerEmocion : MonoBehaviour
     {
         todasLasEmociones = new List<EmocionInfo>(Resources.LoadAll<EmocionInfo>(carpetaEmociones));
  
-        if (todasLasEmociones.Count < cantidadOpciones)
+        if (todasLasEmociones.Count < opcionesObjetivo)
         {
             Debug.LogWarning($"Solo se encontraron {todasLasEmociones.Count} EmocionInfo en " +
-                $"Assets/Resources/{carpetaEmociones}. Necesitás al menos {cantidadOpciones} para armar una ronda.");
+                $"Assets/Resources/{carpetaEmociones}. Necesitás al menos {opcionesObjetivo} para armar una ronda.");
         }
     }
  
@@ -116,7 +129,7 @@ public class GameManagerEmocion : MonoBehaviour
         Barajar(pool);
  
         List<EmocionInfo> seleccionadas = new List<EmocionInfo> { emocionActual };
-        for (int i = 0; i < cantidadOpciones - 1 && i < pool.Count; i++)
+        for (int i = 0; i < opcionesObjetivo - 1 && i < pool.Count; i++)
         {
             seleccionadas.Add(pool[i]);
         }
@@ -125,7 +138,7 @@ public class GameManagerEmocion : MonoBehaviour
         // 3) Instanciar un botón por opción dentro del contenedor con Grid Layout Group.
         // El grid se acomoda solo (columnas/filas, spacing, tamaño de celda) según
         // cómo lo configures en el Inspector del contenedor, así que esto sirve
-        // igual si mañana cambiás cantidadOpciones a 6, 8, etc.
+        // igual si mañana cambiás la dificultad y opcionesObjetivo pasa a ser 6, 8, etc.
         foreach (var info in seleccionadas)
         {
             OpcionEmocion nueva = Instantiate(opcionPrefab, contenedorOpciones);
@@ -144,7 +157,7 @@ public class GameManagerEmocion : MonoBehaviour
         if (esCorrecta)
         {
             opcionElegida.MarcarComoCorrecta();
-            if (feedbackText != null) feedbackText.text = "¡Correcto!";
+            if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
             TerminarRonda();
             return;
         }
@@ -180,7 +193,7 @@ public class GameManagerEmocion : MonoBehaviour
         }
         Invoke(nameof(NuevaRonda), delayEntreRondas);
     }
-
+ 
  
     void TerminarJuego()
     {
