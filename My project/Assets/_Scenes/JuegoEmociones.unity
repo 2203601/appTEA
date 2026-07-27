@@ -154,7 +154,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -141, y: 133}
+  m_AnchoredPosition: {x: -175, y: 133}
   m_SizeDelta: {x: 250.02, y: 219.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &33077013
@@ -813,8 +813,24 @@ MonoBehaviour:
   contenedorOpciones: {fileID: 1944816088}
   opcionPrefab: {fileID: 6923689770527448285, guid: 73875c8cb515d4d868c11a062585928b, type: 3}
   feedbackText: {fileID: 1868281980}
+  rondaText: {fileID: 0}
   cantidadOpciones: 3
+  totalRondas: 4
   delayEntreRondas: 1.2
+  frasesCorrecto:
+  - Muy bien!
+  - Excelente!
+  - "As\xED es!"
+  - Genial!
+  frasesReintentar:
+  - "Intent\xE1 de nuevo"
+  - Casi, proba otra vez
+  - "No es esa, cu\xE1l ser\xE1?"
+  - "Ups, eleg\xED otra opci\xF3n"
+  frasesRevelar:
+  - Era {0}
+  - La respuesta correcta era {0}
+  - Esta vez era {0}
 --- !u!1 &1164322224
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,7 +1027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1019,7 +1035,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: ee8de7a50cfaa4669ba2834639e90d6a, type: 3}
     m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
@@ -1092,8 +1108,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -141, y: -178}
-  m_SizeDelta: {x: 835.3, y: 260.64}
+  m_AnchoredPosition: {x: -159.3, y: -198}
+  m_SizeDelta: {x: 765.83, y: 215.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1944816089
 MonoBehaviour:

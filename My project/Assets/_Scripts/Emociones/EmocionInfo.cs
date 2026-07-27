@@ -6,6 +6,7 @@ public class EmocionInfo : ScriptableObject
     public string emocionNombre;
     public Sprite emocionSprite;
 
+
 }
 
 
