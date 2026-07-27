@@ -69,6 +69,13 @@ public class GameManagerEmocion : MonoBehaviour
     int rondaActual;
     int intentosFallidos;
     bool esperandoSiguienteRonda;
+
+
+    // animación del personaje
+    public Animator personaje;
+ 
+    // nombre del parámetro Trigger que armaste en el Animator Controller
+    static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
  
     void Awake()
     {
@@ -158,6 +165,10 @@ public class GameManagerEmocion : MonoBehaviour
         {
             opcionElegida.MarcarComoCorrecta();
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
+
+            // Dispara la animación de sonreír. El Animator Controller se encarga
+            // de volver solo a Idle cuando el clip termina (transición con Exit Time).
+            if (personaje != null) personaje.SetTrigger(SonreirTrigger);
             TerminarRonda();
             return;
         }
