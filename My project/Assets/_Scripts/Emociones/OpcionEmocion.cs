@@ -32,7 +32,7 @@ public class OpcionEmocion : MonoBehaviour
 
     void OnClick()
     {
-        gameManager.Responder(nombreEmocion, this);
+        gameManager.ResponderEmocion(nombreEmocion, this);
     }
 
     public void MarcarComoCorrecta()
