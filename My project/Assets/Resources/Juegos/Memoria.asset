@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Memoria
   m_EditorClassIdentifier: Assembly-CSharp::GameData
   gameId: Memoria
-  titulo: {fileID: -1530270011, guid: c68c5bb66350b40b9be44cea7af075f0, type: 3}
+  titulo: Memorama
   descripcion: Busca Los Pares !
   icono: {fileID: 21300000, guid: 73d87bc3a27171144985c68fbbd54380, type: 3}
   colorTema: {r: 0, g: 0, b: 0, a: 1}

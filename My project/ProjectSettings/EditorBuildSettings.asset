@@ -12,8 +12,17 @@ EditorBuildSettings:
     path: Assets/_Scenes/IniciarSesion.unity
     guid: 52f8544b6ebe94ab79949d46efcc9711
   - enabled: 1
+    path: Assets/_Scenes/CrearCuenta.unity
+    guid: 34a5a56f054ff40279573cb4889bfc6f
+  - enabled: 1
+    path: Assets/_Scenes/Menu.unity
+    guid: 8ee6fff8ba8e343b3a73eb41c4254635
+  - enabled: 1
     path: Assets/_Scenes/JuegoMemoria.unity
     guid: d63affc265ab5442b826b1665134e3b2
+  - enabled: 1
+    path: Assets/_Scenes/JuegoEmociones.unity
+    guid: fb7798b9baff74616987cd5e77691b49
   - enabled: 0
     path: Assets/_Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05

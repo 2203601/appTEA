@@ -33,7 +33,7 @@ public class GameData : ScriptableObject
 {
     [Header("Info general")]
     public string gameId;          // identificador único, ej: "memoria"
-    public Sprite titulo;          // ej: "Memoria"
+    public string titulo;          // ej: "Memoria"
     [TextArea] public string descripcion; // ej: "Encuentra los pares"
     public Sprite icono;
     public Color colorTema = Color.white;

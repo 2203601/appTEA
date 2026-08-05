@@ -15,13 +15,16 @@ public class GameCardUI : MonoBehaviour
 {
     [Header("Referencias UI (arrastrar desde el prefab)")]
     [SerializeField] private Image fondo;
-    [SerializeField] private Image titulo;
+    [SerializeField] private Text titulo;
     [SerializeField] private Image icono;
 
 
     private Button boton;
     private GameData data;
     private DifficultyModalUI modal;
+
+
+    private Button botonHome;
 
     private void Awake()
     {
@@ -33,7 +36,7 @@ public class GameCardUI : MonoBehaviour
         data = gameData;
         modal = modalRef;
 
-        if (titulo != null) titulo.sprite = data.titulo;
+        if (titulo != null) titulo.text = data.titulo;
         if (fondo != null) fondo.color = data.colorTema;
         if (icono != null) icono.sprite = data.icono;
 
@@ -44,6 +47,9 @@ public class GameCardUI : MonoBehaviour
 
     private void OnCardClicked()
     {
+    
+
         modal.Abrir(data);
     }
+    
 }

@@ -25,7 +25,7 @@ public class IniciarSesion : MonoBehaviour
 
     void OnMouseDown()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 }
 
