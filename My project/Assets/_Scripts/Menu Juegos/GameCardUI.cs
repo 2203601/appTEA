@@ -2,14 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Controla una tarjeta individual del grid (ej: "Memoria", "Encajar Formas").
-/// La tarjeta muestra solo el sprite (ícono) y el nombre del juego.
-/// Este componente va en el mismo GameObject que tiene el Button
-/// (el GameObject ES el botón; el script no referencia un botón aparte).
-/// Al tocarla, abre el modal de dificultad para ese juego.
-/// </summary>
-/// /// 
 [RequireComponent(typeof(Button))]
 public class GameCardUI : MonoBehaviour
 {

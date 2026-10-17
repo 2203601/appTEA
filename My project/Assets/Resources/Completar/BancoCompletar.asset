@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e825b3dc29224ed89ff33e65cc37a88, type: 3}
+  m_Name: BancoCompletar
+  m_EditorClassIdentifier: Completar.Datos::BancoCompletar
+  numeros:
+  - caracter: 48
+    sprite: {fileID: 1668294934, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 49
+    sprite: {fileID: -59687261, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 50
+    sprite: {fileID: -935068342, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 51
+    sprite: {fileID: 2038918991, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 52
+    sprite: {fileID: -1256451622, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 53
+    sprite: {fileID: 471614725, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 54
+    sprite: {fileID: 179062352, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 55
+    sprite: {fileID: 301869068, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 56
+    sprite: {fileID: 881805180, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  - caracter: 57
+    sprite: {fileID: 1001915604, guid: 3d2a3e3eaeca04108863cfc92227ac48, type: 3}
+  letras:
+  - caracter: 65
+    sprite: {fileID: 51503551, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 66
+    sprite: {fileID: 726530868, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 67
+    sprite: {fileID: 222353512, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 68
+    sprite: {fileID: 1688575681, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 69
+    sprite: {fileID: -218841468, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 70
+    sprite: {fileID: 1194653070, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 71
+    sprite: {fileID: -1459467838, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 72
+    sprite: {fileID: -625798051, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 73
+    sprite: {fileID: -1086288331, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 74
+    sprite: {fileID: 554928455, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 75
+    sprite: {fileID: 1174131854, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 76
+    sprite: {fileID: 1284121748, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 77
+    sprite: {fileID: 224364162, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 78
+    sprite: {fileID: -1301399382, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 79
+    sprite: {fileID: 1229419605, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 80
+    sprite: {fileID: -1842005943, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 81
+    sprite: {fileID: -609351186, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 82
+    sprite: {fileID: 1686474328, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 83
+    sprite: {fileID: 619226380, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 84
+    sprite: {fileID: 435093728, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 85
+    sprite: {fileID: 922686279, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 86
+    sprite: {fileID: 209099897, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 87
+    sprite: {fileID: 869498009, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 88
+    sprite: {fileID: 891570442, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 89
+    sprite: {fileID: 579974575, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  - caracter: 90
+    sprite: {fileID: -1034554246, guid: 98e2dc4698f4046a3a0a3a900ed66136, type: 3}
+  secuenciasNumeros:
+  - 01234
+  - 12345
+  - 23456
+  - 34567
+  - 45678
+  - 56789
+  palabrasConImagen:
+  - palabra: ABRAZO
+    imagen: {fileID: 381833989, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: CERDO
+    imagen: {fileID: -879082969, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: CONEJO
+    imagen: {fileID: 491214654, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: DONA
+    imagen: {fileID: 1951848006, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: DORMIR
+    imagen: {fileID: -1238967029, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: EMPANADA
+    imagen: {fileID: -556743913, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: LEER
+    imagen: {fileID: 627591271, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: OVEJA
+    imagen: {fileID: 1074328682, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: PATO
+    imagen: {fileID: 619246085, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: PIZZA
+    imagen: {fileID: -2081414162, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  - palabra: TACOS
+    imagen: {fileID: 473518542, guid: e5d3829362bc64c0cbbb76cb92e6af30, type: 3}
+  palabrasLargas:
+  - PELOTA
+  - ZAPATO
+  - TOMATE
+  - TORTUGA
+  - MARIPOSA
+  - ELEFANTE

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a310c30131bf475cb17a207c512db43, type: 3}
+  m_Name: Chimuelo
+  m_EditorClassIdentifier: Assembly-CSharp::Rompecabeza
+  nombre: Chimuelo
+  imagenCompleta: {fileID: 0}
+  piezas:
+  - {fileID: 749105414, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: 1717365454, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: 937405064, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: -726108762, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: -1713168596, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: 117233165, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: 187437349, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: -1630923382, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
+  - {fileID: -1863245706, guid: 2d22efb764fac4d3e9bb0b9b546ba9d1, type: 3}
