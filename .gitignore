@@ -1,0 +1,56 @@
+
+# Carpetas generadas por Unity (se regeneran solas, nunca deben subirse)
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+[Uu]serSettings/
+
+# Archivos de recompilación de assets
+[Aa]ssets/AssetStoreTools*
+/[Aa]ssets/[Pp]lugins/[Ee]ditor/JetBrains*
+
+# Metadatos de VisualStudio/Rider/VSCode
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Archivos de Gradle generados por Unity
+*.androidlib
+[Aa]ssets/[Aa]ndroid/*
+[Aa]ssets/[Ii]OS/*
+
+# Crashlytics generado
+crashlytics-build.properties
+
+# Archivos específicos de packages (auto-generados)
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# ===== NO TOCAR =====
+# Nunca ignores esto, o Unity va a regenerar GUIDs distintos en cada máquina
+# y eso es justo lo que causa las carpetas duplicadas (Fonts 2, Materials 3, etc.)
+!/[Aa]ssets/**
+!/[Aa]ssets/**/*.meta
+!/[Pp]acket-lock.json
+!/[Pp]roject[Ss]ettings/**

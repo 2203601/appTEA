@@ -3,12 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Ventana modal (popup) para elegir dificultad (siempre) y, si el juego
-/// lo requiere, una temática (no todos los juegos la tienen). Ambas listas
-/// se arman en runtime con el mismo prefab (OptionButtonUI). Se confirma
-/// con el botón "Jugar". Se activa desde GameCardUI.
-/// </summary>
+
 public class DifficultyModalUI : MonoBehaviour
 {
     [Header("Referencias generales")]

@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// Nivel de dificultad seleccionable para cualquier minijuego.
-/// </summary>
 public enum Difficulty
 {
     Facil,
@@ -11,9 +8,7 @@ public enum Difficulty
     Dificil
 }
 
-/// <summary>
-/// Una opción de temática dentro de un juego, ej: "Animales", "Frutas", "Países".
-/// </summary>
+
 [System.Serializable]
 public class TemaOpcion
 {
@@ -24,10 +19,6 @@ public class TemaOpcion
     
 }
 
-/// <summary>
-/// Datos de un juego del menú. Creá un asset por cada tarjeta
-/// (click derecho en el Project > Create > Mundo de Aprendizaje > Game Data).
-/// </summary>
 [CreateAssetMenu(fileName = "NewGameData", menuName = "Mundo de Aprendizaje/Game Data")]
 public class GameData : ScriptableObject
 {

@@ -8,10 +8,7 @@ public static class GameSession
     public static string GameId { get; private set; }
     public static Difficulty SelectedDifficulty { get; private set; }
 
-    /// <summary>
-    /// Nombre de la temática elegida (ej: "Animales"). Queda en null
-    /// para los juegos que no usan temática.
-    /// </summary>
+  
     public static string SelectedTema { get; private set; }
 
     public static void SetSelection(string gameId, Difficulty difficulty, string tema = null)

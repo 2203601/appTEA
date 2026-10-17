@@ -3,19 +3,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Botón de opción genérico, reutilizado tanto para elegir dificultad
-/// como temática dentro del modal (mismo prefab para las dos listas).
-/// Se instancia dinámicamente y avisa con un callback cuándo lo tocan.
-/// </summary>
+
 public class OptionButtonUI : MonoBehaviour
 {
     [SerializeField] private Image icono;
     [SerializeField] private Image nombre;
     [SerializeField] private Button boton;
-    [SerializeField] private GameObject marcoSeleccionado; // borde/highlight, se prende al elegirlo
+    [SerializeField] private GameObject marcoSeleccionado; 
 
-    /// <summary>Identificador de la opción (ej: "Facil", o el nombre de la temática).</summary>
     public string Id { get; private set; }
 
     public void Configurar(string id, Sprite nombresprite, Sprite sprite, Action<string> onElegido)

@@ -593,7 +593,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 46, y: -209}
   m_SizeDelta: {x: 262.93, y: 144.35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &566602655
@@ -682,9 +682,9 @@ MonoBehaviour:
   iconoFacil: {fileID: 671589743, guid: 942b279158e0746e486b53168151398d, type: 3}
   iconoMedio: {fileID: -1783836268, guid: 942b279158e0746e486b53168151398d, type: 3}
   iconoDificil: {fileID: 2038944911, guid: 942b279158e0746e486b53168151398d, type: 3}
-  nombreFacilSprite: {fileID: 0}
-  nombreMedioSprite: {fileID: 0}
-  nombreDificilSprite: {fileID: 0}
+  nombreFacilSprite: {fileID: -1296382537, guid: cf4843df7521a4fa9a629d0494dcd504, type: 3}
+  nombreMedioSprite: {fileID: 1508318908, guid: cf4843df7521a4fa9a629d0494dcd504, type: 3}
+  nombreDificilSprite: {fileID: -1997341883, guid: cf4843df7521a4fa9a629d0494dcd504, type: 3}
   seccionTematica: {fileID: 1700067970}
   tematicaContainer: {fileID: 566602654}
   botonJugar: {fileID: 1628743739}
@@ -1318,8 +1318,9 @@ MonoBehaviour:
   juegos:
   - {fileID: 11400000, guid: fcaec8ee54ef04480ae5c59938652cf2, type: 2}
   - {fileID: 11400000, guid: 386407c34fb8542769cd4dbaef04db1c, type: 2}
-  - {fileID: 11400000, guid: 386407c34fb8542769cd4dbaef04db1c, type: 2}
-  - {fileID: 11400000, guid: 386407c34fb8542769cd4dbaef04db1c, type: 2}
+  - {fileID: 11400000, guid: 2077def71113c4ccfb2e431f2f019437, type: 2}
+  - {fileID: 11400000, guid: 4d97f26b7b8e14aeaa9c3be50df83551, type: 2}
+  - {fileID: 11400000, guid: 258ed3bdc84b14523ac5688c350d4fd2, type: 2}
   juegosPorPagina: 2
   botonAnterior: {fileID: 943911069}
   botonSiguiente: {fileID: 1167927260}
@@ -1872,9 +1873,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 281, y: -206}
+  m_AnchoredPosition: {x: 330, y: 30}
   m_SizeDelta: {x: 262.93, y: 144.35}
-  m_Pivot: {x: 0.5, y: 0.49999994}
+  m_Pivot: {x: 0.5, y: 0.49999997}
 --- !u!114 &2002541748
 MonoBehaviour:
   m_ObjectHideFlags: 0

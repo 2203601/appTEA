@@ -2,13 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Genera el grid de tarjetas de juego a partir de una lista de GameData,
-/// mostrando solo "juegosPorPagina" tarjetas a la vez. Los botones
-/// Anterior/Siguiente recorren el resto de la lista.
-/// Colocar en un GameObject vacío dentro del Canvas, junto al contenedor
-/// que tiene el Grid/Horizontal Layout Group.
-/// </summary>
+
 public class GamesMenuManager : MonoBehaviour
 {
     [Header("Datos de los juegos (arrastrar los assets GameData)")]
