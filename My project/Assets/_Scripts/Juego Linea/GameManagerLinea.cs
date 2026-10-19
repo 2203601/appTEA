@@ -24,6 +24,7 @@ public class GameManagerLinea : MonoBehaviour
     public Text feedbackText;
     public Text rondaText;
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
 
     [Header("Config")]
     public int rondasFacil = 4;
@@ -475,6 +476,7 @@ public class GameManagerLinea : MonoBehaviour
             confeti.Clear();
             confeti.Play();
         }
+        if (panelFin != null) panelFin.Mostrar();
     }
 
     // ----------------------------------------------------------------- Soporte

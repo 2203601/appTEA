@@ -9,7 +9,7 @@ public class PanelPausa : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private Button botonSeguir;
     [SerializeField] private Button botonSalir;
-    [SerializeField] private string escenaSalida = "INICIO";
+    [SerializeField] private string escenaSalida = "Menu";
 
     void Awake()
     {

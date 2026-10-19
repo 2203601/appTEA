@@ -43,6 +43,7 @@ public class MemoriaGameManager : MonoBehaviour
  
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
  
     // nombre del parámetro Trigger que armaste en el Animator Controller
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
@@ -185,6 +186,7 @@ public class MemoriaGameManager : MonoBehaviour
  
     void Win()
     {
+        if (panelFin != null) panelFin.Mostrar();
     }
     // Update is called once per frame
     public void BackToMenu()

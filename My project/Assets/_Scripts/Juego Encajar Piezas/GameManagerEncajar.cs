@@ -87,6 +87,7 @@ public class GameManagerEncajar : MonoBehaviour
 
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
 
     // nombre del parámetro Trigger que armaste en el Animator Controller
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
@@ -355,6 +356,7 @@ public class GameManagerEncajar : MonoBehaviour
         piezasActuales.Clear();
 
         if (feedbackText != null) feedbackText.text = "";
+        if (panelFin != null) panelFin.Mostrar();
 
     }
     string FraseAlAzar(string[] frases)

@@ -22,6 +22,7 @@ public class GameManagerCompletar : MonoBehaviour
     public Text feedbackText;
     public Text rondaText;
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
 
     [Header("Config")]
     public int totalRondas = 5;
@@ -294,6 +295,7 @@ public class GameManagerCompletar : MonoBehaviour
         if (rondaText != null) rondaText.text = "";
         if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesFin);
         if (personaje != null) personaje.SetTrigger(SonreirTrigger);
+        if (panelFin != null) panelFin.Mostrar();
     }
 
     string FraseAlAzar(string[] frases)

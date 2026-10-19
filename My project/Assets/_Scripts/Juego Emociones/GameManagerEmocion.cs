@@ -90,6 +90,7 @@ public class GameManagerEmocion : MonoBehaviour
 
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
  
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
 
@@ -359,6 +360,7 @@ public class GameManagerEmocion : MonoBehaviour
         
     
         if (feedbackText != null) feedbackText.text = "";
+        if (panelFin != null) panelFin.Mostrar();
  
     }
     string FraseAlAzar(string[] frases)
