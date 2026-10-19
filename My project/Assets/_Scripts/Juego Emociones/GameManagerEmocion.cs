@@ -245,6 +245,7 @@ public class GameManagerEmocion : MonoBehaviour
 
         if (esCorrecta)
         {
+            PistaBrillo.Desactivar(opcionElegida.gameObject);
             opcionElegida.MarcarComoCorrecta();
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
 
@@ -265,14 +266,13 @@ public class GameManagerEmocion : MonoBehaviour
             return;
         }
 
-        // Segundo error: se revela cuál era la correcta y se cierra la ronda
-        if (feedbackText != null) feedbackText.text = string.Format(FraseAlAzar(frasesRevelar), emocionActual.emocionNombre);
+        // Desde el segundo error la correcta se destaca con un borde suave; el chico la tiene que tocar
+        if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
         foreach (var opcion in opcionesActuales)
         {
             if (opcion.label.text == emocionActual.emocionNombre)
-                opcion.MarcarComoCorrecta();
+                PistaBrillo.Activar(opcion.gameObject);
         }
-        TerminarRonda();
     }
  
     public void ResponderSituacion(EmojiArrastrable emojiSoltado)
@@ -290,6 +290,7 @@ public class GameManagerEmocion : MonoBehaviour
 
         if (esCorrecta)
         {
+            PistaBrillo.Desactivar(emojiSoltado.gameObject);
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
             emojiSoltado.transform.SetParent(situacionImage.transform, true);
             if (personaje != null) personaje.SetTrigger(SonreirTrigger);
@@ -309,10 +310,13 @@ public class GameManagerEmocion : MonoBehaviour
             return;
         }
 
-        // Segundo error: se revela cuál era la correcta y se cierra la ronda
-        if (feedbackText != null)
-            feedbackText.text = string.Format(FraseAlAzar(frasesRevelar), situacionActual.emocionCorrecta);
-        TerminarRonda();
+        // Desde el segundo error el emoji correcto se destaca con un borde suave; el chico lo tiene que arrastrar
+        if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
+        foreach (var emoji in emojisActuales)
+        {
+            if (emoji.EmocionNombre == situacionActual.emocionCorrecta)
+                PistaBrillo.Activar(emoji.gameObject);
+        }
     }
     void TerminarRonda()
     {

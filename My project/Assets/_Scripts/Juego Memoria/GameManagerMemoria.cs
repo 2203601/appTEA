@@ -36,6 +36,15 @@ public class MemoriaGameManager : MonoBehaviour
     List<CardInfo> randomCardList;
     List<Card> selectedCards;
  
+    [Header("Pista")]
+    [Tooltip("Segundos sin acertar un par antes de que empiece a brillar la carta que corresponde dar vuelta")]
+    public float segundosParaPista = 180f;
+
+    TemporizadorInactividad temporizadorPista;
+    List<Card> todasLasCartas = new List<Card>();
+    bool pistaActiva;
+    Card cartaConPista;
+
     int totalCouples;
     int currentCouples = 0;
     int paresObjetivo;
@@ -54,6 +63,7 @@ public class MemoriaGameManager : MonoBehaviour
         ordererCardList = new List<CardInfo>();
         randomCardList = new List<CardInfo>();
         selectedCards = new List<Card>();
+        temporizadorPista = new TemporizadorInactividad(segundosParaPista);
  
         allCards = Resources.LoadAll<CardInfo>("Cartas");
  
@@ -124,6 +134,7 @@ public class MemoriaGameManager : MonoBehaviour
             Card instance;
             instance = Instantiate(prefabCard, contentDeckTransform);
             instance.SetCard(card);
+            todasLasCartas.Add(instance);
  
             // asignamos el metodo a la accion
             instance.OnSelect = AddCards;
@@ -133,6 +144,7 @@ public class MemoriaGameManager : MonoBehaviour
     void AddCards(Card selectCard)
     {
         selectedCards.Add(selectCard);
+        if (pistaActiva) ActualizarPista();
         if (Card.FLIPPED_CARD >= 2)
         {
             CompareSelectedCard();
@@ -145,6 +157,11 @@ public class MemoriaGameManager : MonoBehaviour
         {
             currentCouples++;
             DisplayCouple();
+            selectedCards[0].Encontrada = true;
+            selectedCards[1].Encontrada = true;
+            temporizadorPista.Reiniciar();
+            pistaActiva = false;
+            QuitarPista();
             selectedCards.Clear();
             Card.FLIPPED_CARD = 0;
  
@@ -177,6 +194,51 @@ public class MemoriaGameManager : MonoBehaviour
  
         selectedCards.Clear();
         Card.FLIPPED_CARD = 0;
+
+        if (pistaActiva) ActualizarPista();
+    }
+ 
+    void Update()
+    {
+        if (Card.GAME_OVER || currentCouples >= totalCouples) return;
+
+        // Sin límite de tiempo: esto solo enciende una pista suave. En pausa (timeScale = 0) no avanza.
+        if (temporizadorPista.Avanzar(Time.deltaTime))
+        {
+            pistaActiva = true;
+            ActualizarPista();
+        }
+    }
+
+    // La carta que "toca dar vuelta": si ya hay una dada vuelta, su par; si no, cualquiera sin par encontrado.
+    void ActualizarPista()
+    {
+        Card objetivo = null;
+        if (selectedCards.Count == 1)
+        {
+            Card elegida = selectedCards[0];
+            objetivo = todasLasCartas.Find(c => c != elegida && !c.Encontrada && c.GetCardName() == elegida.GetCardName());
+        }
+        else if (selectedCards.Count == 0)
+        {
+            objetivo = todasLasCartas.Find(c => !c.Encontrada);
+        }
+        // con dos dadas vuelta se está comparando: sin pista hasta que se vuelvan a tapar
+
+        if (objetivo == cartaConPista) return;
+
+        QuitarPista();
+        if (objetivo != null)
+        {
+            PistaBrillo.Activar(objetivo.gameObject);
+            cartaConPista = objetivo;
+        }
+    }
+
+    void QuitarPista()
+    {
+        if (cartaConPista != null) PistaBrillo.Desactivar(cartaConPista.gameObject);
+        cartaConPista = null;
     }
  
     void Lose()

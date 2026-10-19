@@ -382,7 +382,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 44
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1350,7 +1350,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 64
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1480,6 +1480,7 @@ MonoBehaviour:
   prefabCard: {fileID: 6009400902384373059, guid: 54e4af2c6b71f445cb458bdf1624e03c, type: 3}
   allCards:
   - {fileID: 0}
+  segundosParaPista: 10
   personaje: {fileID: 2129084143}
   panelFin: {fileID: 644623692}
 --- !u!4 &975852019

@@ -24,6 +24,9 @@ public class Card : MonoBehaviour
 
     public static bool GAME_OVER;
 
+    // true cuando ya se encontró su par (el GameManager lo usa para elegir a quién darle la pista)
+    public bool Encontrada;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {

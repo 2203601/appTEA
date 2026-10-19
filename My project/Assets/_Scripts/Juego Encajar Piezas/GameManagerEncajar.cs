@@ -37,6 +37,13 @@ public class GameManagerEncajar : MonoBehaviour
     public float delayEntreRondas = 1.2f;
     int opcionesObjetivo;
 
+    [Header("Pista")]
+    [Tooltip("Segundos sin que el chico toque la pantalla antes de que una pieza empiece a brillar")]
+    public float segundosParaPista = 20f;
+
+    TemporizadorInactividad inactividad;
+    GameObject piezaConPista;
+
     private static readonly Dictionary<Difficulty, int> opcionesPorDificultad = new Dictionary<Difficulty, int>
     {
         { Difficulty.Facil, 3 },
@@ -96,6 +103,7 @@ public class GameManagerEncajar : MonoBehaviour
     void Awake()
     {
         Instancia = this;
+        inactividad = new TemporizadorInactividad(segundosParaPista);
 
         opcionesObjetivo = opcionesPorDificultad.TryGetValue(GameSession.SelectedDifficulty, out int opciones)
             ? opciones
@@ -154,6 +162,8 @@ public class GameManagerEncajar : MonoBehaviour
         esperandoSiguienteRonda = false;
         intentosFallidos = 0;
         if (feedbackText != null) feedbackText.text = "";
+        QuitarPista();
+        inactividad.Reiniciar();
 
         // 0) Limpiar los emojis de la ronda anterior
         foreach (var pieza in piezasActuales)
@@ -208,6 +218,8 @@ public class GameManagerEncajar : MonoBehaviour
 
         piezasColocadasCorrectas = 0;
         piezaAgarrada = null;
+        QuitarPista();
+        inactividad.Reiniciar();
         PiezaRompecabezas.ReiniciarOrden();
 
         // Las piezas ya están armadas en la escena, dentro del panel difícil
@@ -287,6 +299,11 @@ public class GameManagerEncajar : MonoBehaviour
 
     void Update()
     {
+        // En pausa (timeScale = 0) no avanza nada: ni la pista ni el arrastre del rompecabezas
+        if (Time.timeScale == 0f) return;
+
+        ActualizarPista();
+
         if (piezasRompecabezas == null || esperandoSiguienteRonda) return;
 
         Pointer puntero = Pointer.current;
@@ -333,9 +350,68 @@ public class GameManagerEncajar : MonoBehaviour
         }
     }
 
+    // Pista suave: tras segundosParaPista sin tocar la pantalla, brilla la pieza que corresponde.
+    // Cualquier toque la apaga y vuelve a empezar la cuenta.
+    void ActualizarPista()
+    {
+        Pointer puntero = Pointer.current;
+        if (puntero != null && puntero.press.wasPressedThisFrame)
+        {
+            QuitarPista();
+            inactividad.Reiniciar();
+        }
+
+        if (esperandoSiguienteRonda) return;
+
+        if (inactividad.Avanzar(Time.deltaTime)) MostrarPista();
+    }
+
+    void MostrarPista()
+    {
+        GameObject objetivo = null;
+
+        if (GameSession.SelectedDifficulty == Difficulty.Dificil)
+        {
+            // La pieza suelta que está más arriba (la que se ve completa)
+            PiezaRompecabezas mejor = null;
+            if (piezasRompecabezas != null)
+            {
+                foreach (var pieza in piezasRompecabezas)
+                {
+                    if (pieza.Colocada) continue;
+                    if (mejor == null || pieza.Orden > mejor.Orden) mejor = pieza;
+                }
+            }
+            if (mejor != null) objetivo = mejor.gameObject;
+        }
+        else if (piezaActual != null)
+        {
+            // La opción que encaja en la silueta de esta ronda
+            foreach (var pieza in piezasActuales)
+            {
+                if (pieza != null && pieza.PiezaNombre == piezaActual.piezaNombre)
+                {
+                    objetivo = pieza.gameObject;
+                    break;
+                }
+            }
+        }
+
+        if (objetivo == null) return;
+        PistaBrillo.Activar(objetivo);
+        piezaConPista = objetivo;
+    }
+
+    void QuitarPista()
+    {
+        if (piezaConPista != null) PistaBrillo.Desactivar(piezaConPista);
+        piezaConPista = null;
+    }
+
     void TerminarRonda()
     {
         esperandoSiguienteRonda = true;
+        QuitarPista();
 
 
         foreach (var pieza in piezasActuales)
