@@ -1,0 +1,36 @@
+name: CI - Calidad de los juegos
+
+# Se ejecuta en cada push y pull request. Corre el mismo script que se usa en local: quality/run-local.sh
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  calidad:
+    name: Compilación, pruebas, cobertura, análisis estático y quality gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Node 20 (jscpd)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Pipeline de calidad (quality/run-local.sh)
+        run: bash quality/run-local.sh
+
+      - name: Publicar reportes (cobertura HTML, SARIF, duplicación, resultados de pruebas)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-calidad
+          path: quality/out/
+          retention-days: 30

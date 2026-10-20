@@ -89,7 +89,8 @@ public class GameManagerEncajar : MonoBehaviour
     List<PiezaArrastrable> piezasActuales = new List<PiezaArrastrable>();
 
     int rondaActual;
-    int intentosFallidos;
+    RondaDeOpciones ronda = new RondaDeOpciones(2);   // reglas de la ronda (lógica pura, con pruebas unitarias)
+    readonly System.Random azar = new System.Random();
     bool esperandoSiguienteRonda;
 
     // animación del personaje
@@ -160,7 +161,7 @@ public class GameManagerEncajar : MonoBehaviour
         if (rondaText != null) rondaText.text = $"Ronda {rondaActual}/{totalRondas}";
 
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
         QuitarPista();
         inactividad.Reiniciar();
@@ -184,18 +185,8 @@ public class GameManagerEncajar : MonoBehaviour
             return;
         }
 
-        // 2) Armar el pool de emojis: el correcto + distractores sin repetir
-        List<PiezaInfo> pool = new List<PiezaInfo>(todasLasPiezasAEncajar);
-        pool.Remove(piezaCorrecta);
-        Barajar(pool);
-
-
-        List<PiezaInfo> seleccionadas = new List<PiezaInfo> { piezaCorrecta };
-        for (int i = 0; i < opcionesObjetivo - 1 && i < pool.Count; i++)
-        {
-            seleccionadas.Add(pool[i]);
-        }
-        Barajar(seleccionadas);
+        // 2) La correcta más distractores, mezclados
+        List<PiezaInfo> seleccionadas = RondaDeOpciones.ElegirOpciones(todasLasPiezasAEncajar, piezaCorrecta, opcionesObjetivo, azar);
 
         // 3) Instanciar un emoji arrastrable por opción
         foreach (var info in seleccionadas)
@@ -213,7 +204,7 @@ public class GameManagerEncajar : MonoBehaviour
         if (rondaText != null) rondaText.text = "";
 
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
 
         piezasColocadasCorrectas = 0;
@@ -268,6 +259,7 @@ public class GameManagerEncajar : MonoBehaviour
         }
 
         bool esCorrecta = piezaSoltada.PiezaNombre == piezaActual.piezaNombre;
+        ResultadoRespuesta resultado = ronda.Responder(esCorrecta);
 
         if (esCorrecta)
         {
@@ -281,9 +273,7 @@ public class GameManagerEncajar : MonoBehaviour
 
         // Respuesta incorrecta: el emoji vuelve a la bandeja
         piezaSoltada.VolverAPosicionOriginal();
-        intentosFallidos++;
-
-        if (intentosFallidos < 2)
+        if (resultado == ResultadoRespuesta.Fallo)
         {
             // Primer error: puede volver a intentar con los emojis que quedan
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
@@ -440,15 +430,6 @@ public class GameManagerEncajar : MonoBehaviour
         if (frases == null || frases.Length == 0) return "";
         return frases[UnityEngine.Random.Range(0, frases.Length)];
     }
-    void Barajar(List<PiezaInfo> lista)
-    {
-        for (int i = lista.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-            (lista[i], lista[j]) = (lista[j], lista[i]);
-        }
-    }
-    
     void Barajar(List<int> lista)
     {
         for (int i = lista.Count - 1; i > 0; i--)

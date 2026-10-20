@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Las mismas pruebas EditMode de Unity (NUnit), ejecutadas con dotnet test. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Scripts>$(MSBuildThisFileDirectory)../../My project/Assets/_Scripts/</Scripts>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(Scripts)**/Tests/EditMode/**/*.cs" />
+    <ProjectReference Include="../Juegos.Logica/Juegos.Logica.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>

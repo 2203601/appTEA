@@ -1,0 +1,12 @@
+# Configuración del análisis estático (SonarAnalyzer + analizadores de .NET) para la lógica de los juegos.
+is_global = true
+
+# Los scripts de Unity del proyecto (Linea.Logica, Completar.Logica, etc.) usan el namespace global por
+# convención: así se referencian desde los MonoBehaviour sin 'using'. Mover todo a namespaces es un
+# cambio grande que no aporta calidad medible acá. Decisión registrada en docs/calidad.md.
+dotnet_diagnostic.S3903.severity = none
+dotnet_diagnostic.CA1050.severity = none
+
+# S1135 detecta comentarios "TODO", pero también la palabra española "todo" (ej. "todo mezclado"):
+# falso positivo comprobado.
+dotnet_diagnostic.S1135.severity = none

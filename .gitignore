@@ -54,3 +54,11 @@ Thumbs.db
 !/[Aa]ssets/**/*.meta
 !/[Pp]acket-lock.json
 !/[Pp]roject[Ss]ettings/**
+
+# Los .csproj de quality/ son del pipeline (el resto de *.csproj los genera Unity)
+!quality/**/*.csproj
+
+# Salidas del pipeline de calidad
+quality/out/
+quality/**/bin/
+quality/**/obj/

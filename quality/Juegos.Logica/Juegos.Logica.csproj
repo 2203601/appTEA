@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Compila FUERA de Unity la lógica pura de los juegos (carpetas Logica/) para poder probarla,
+       medir cobertura y analizarla en el pipeline sin necesitar una licencia de Unity.
+       Convención: todo código de juego que se quiera cubrir va en una carpeta "Logica" sin dependencias de UnityEngine. -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <Nullable>disable</Nullable>
+    <AssemblyName>JuegosLogica</AssemblyName>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Scripts>$(MSBuildThisFileDirectory)../../My project/Assets/_Scripts/</Scripts>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(Scripts)**/Logica/**/*.cs" />
+    <Compile Include="$(Scripts)Juego Completar/Datos/Hueco.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="../analyzers.globalconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="9.32.0.97167" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
