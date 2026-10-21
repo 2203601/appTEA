@@ -290,7 +290,7 @@ public class GameManagerEncajar : MonoBehaviour
     void Update()
     {
         // En pausa (timeScale = 0) no avanza nada: ni la pista ni el arrastre del rompecabezas
-        if (Time.timeScale == 0f) return;
+        if (ControlPausa.EnPausa(Time.timeScale)) return;
 
         ActualizarPista();
 
