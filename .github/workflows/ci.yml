@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Inyectar defecto (demostración del gate: solo si el commit dice [demo-fallo])
+      - name: "Inyectar defecto (demostración del gate, solo si el commit dice [demo-fallo])"
         if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[demo-fallo]') }}
         run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
 
