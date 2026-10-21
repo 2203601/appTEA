@@ -19,6 +19,7 @@ public class RondaDeOpcionesTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void SegundoFallo_ActivaLaPista()
     {
         var ronda = new RondaDeOpciones(2);
@@ -41,6 +42,7 @@ public class RondaDeOpcionesTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void Acierto_ResuelveLaRonda_SinImportarLosFallosPrevios()
     {
         var ronda = new RondaDeOpciones(2);

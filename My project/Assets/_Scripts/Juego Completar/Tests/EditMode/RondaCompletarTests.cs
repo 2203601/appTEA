@@ -28,6 +28,7 @@ public class RondaCompletarTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void Avanzar_PasaAlSiguienteHueco_YAlFinalTermina()
     {
         var ronda = Ronda();

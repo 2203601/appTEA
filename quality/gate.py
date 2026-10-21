@@ -22,8 +22,8 @@ SEVERIDADES_BLOQUEANTES = ("Blocker", "Critical")
 TIPOS_BLOQUEANTES = ("Bug", "Vulnerability")
 
 
-def pruebas():
-    archivos = glob.glob(os.path.join(OUT, "tests", "**", "*.trx"), recursive=True)
+def pruebas(carpeta="tests"):
+    archivos = glob.glob(os.path.join(OUT, carpeta, "**", "*.trx"), recursive=True)
     if not archivos:
         return None
     ns = {"t": "http://microsoft.com/schemas/VisualStudio/TeamTest/2010"}
@@ -77,6 +77,11 @@ def fila(nombre, valor, umbral, ok):
 
 def main():
     filas, ok_total = [], True
+
+    sm = pruebas("smoke")
+    ok = sm is not None and sm["failed"] == 0 and sm["executed"] > 0
+    filas.append(fila("Smoke test automático", "sin resultados" if sm is None else f"{sm['passed']}/{sm['total']} pasan, {sm['failed']} fallan", "0 fallos", ok))
+    ok_total &= ok
 
     t = pruebas()
     ok = t is not None and t["failed"] == 0 and t["executed"] > 0

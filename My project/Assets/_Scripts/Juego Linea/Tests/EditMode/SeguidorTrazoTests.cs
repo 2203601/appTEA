@@ -124,6 +124,7 @@ public class SeguidorTrazoTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void UnaRectaSeCompleta()
     {
         var recta = Recta();

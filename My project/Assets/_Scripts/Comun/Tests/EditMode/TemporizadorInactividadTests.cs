@@ -16,6 +16,7 @@ public class TemporizadorInactividadTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void EnElUmbralExacto_Dispara()
     {
         var temporizador = new TemporizadorInactividad(20f);

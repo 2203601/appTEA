@@ -4,6 +4,7 @@ using NUnit.Framework;
 public class ControlPausaTests
 {
     [Test]
+    [Category("Smoke")]
     public void ConTimeScaleCero_EstaEnPausa()
     {
         // Arrange
@@ -25,6 +26,7 @@ public class ControlPausaTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void EnPausa_LaPistaNoAvanzaNiConPasoDeTiempoGrande()
     {
         // Arrange: se simula el Update del juego, que corta el cuadro si está en pausa

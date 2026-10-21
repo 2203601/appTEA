@@ -17,6 +17,7 @@ public class TableroMemoriaTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void SegundaCartaIgual_ArmaElPar_YSumaUnEncontrado()
     {
         var tablero = Tablero();
@@ -85,6 +86,7 @@ public class TableroMemoriaTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void EncontrarTodosLosPares_TerminaElTablero()
     {
         var tablero = Tablero();
@@ -120,6 +122,7 @@ public class TableroMemoriaTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void Pista_ConUnaCartaDadaVuelta_ApuntaASuPar()
     {
         var tablero = Tablero();

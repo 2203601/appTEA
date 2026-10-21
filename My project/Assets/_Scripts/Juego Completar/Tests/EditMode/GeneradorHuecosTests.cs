@@ -86,6 +86,7 @@ public class GeneradorHuecosTests
     }
 
     [Test]
+    [Category("Smoke")]
     public void LosHuecosQuedanOrdenadosDeIzquierdaADerecha()
     {
         for (int semilla = 0; semilla < 100; semilla++)
