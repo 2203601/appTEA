@@ -6,6 +6,16 @@ source "$(dirname "$0")/comun.sh"
 echo "==> Etapa 6: pruebas de mutación"
 dotnet tool restore >/dev/null || exit 1
 cd "$QUALITY/Juegos.Tests"
-dotnet tool run dotnet-stryker --config-file stryker-config.json -O "$OUT/mutacion" 2>&1 \
-    | grep -E "mutants created|total mutants will be tested|Killed|Survived|Timeout|final mutation score|ERR|failed"
-test -f "$OUT/mutacion/reports/mutation-report.json" || { echo "Stryker no generó reporte"; exit 1; }
+mkdir -p "$OUT/mutacion"
+dotnet tool run dotnet-stryker --config-file stryker-config.json -O "$OUT/mutacion" > "$OUT/mutacion/stryker.log" 2>&1
+rc=$?
+
+# resumen
+grep -E "mutants created|total mutants will be tested|Killed|Survived|Timeout|final mutation score" "$OUT/mutacion/stryker.log"
+
+if [ ! -f "$OUT/mutacion/reports/mutation-report.json" ]; then
+    echo "Stryker no generó reporte (código de salida $rc). Registro completo:"
+    echo "--- dotnet --info ---"; dotnet --list-sdks; dotnet --list-runtimes
+    echo "--- stryker.log ---"; cat "$OUT/mutacion/stryker.log"
+    exit 1
+fi
