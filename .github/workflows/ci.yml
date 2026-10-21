@@ -1,6 +1,11 @@
 name: CI - Calidad de los juegos
 
-# Se ejecuta en cada push y pull request. Corre el mismo script que se usa en local: quality/run-local.sh
+# Pipeline en etapas encadenadas (cada etapa es un script de quality/etapas/, el mismo que corre en local):
+#
+#   Compilación + análisis estático -> Smoke -> Pruebas + cobertura --+
+#   Duplicación (en paralelo) ----------------------------------------+-> Quality gate
+#
+# Si una etapa falla, las siguientes no corren; el quality gate corre siempre y resume lo que haya.
 on:
   push:
     branches: [feature/tpcalidad]
@@ -8,31 +13,103 @@ on:
     branches: [feature/tpcalidad]
   workflow_dispatch:
 
+env:
+  # Demostración del gate: un commit con [demo-fallo] rompe a propósito una regla antes de las pruebas.
+  INYECTAR_DEFECTO: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[demo-fallo]') }}
+
 jobs:
-  calidad:
-    name: Compilación, pruebas, cobertura, análisis estático y quality gate
+  compilacion:
+    name: 1 - Compilación y análisis estático
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: .NET 8
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+      - name: Compilar y analizar
+        run: bash quality/etapas/1-compilar.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-compilacion
+          path: quality/out/
+          retention-days: 30
 
-      - name: Node 20 (jscpd)
-        uses: actions/setup-node@v4
+  smoke:
+    name: 2 - Smoke test automático
+    needs: compilacion
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: "Inyectar defecto (demostración del gate, solo si el commit dice [demo-fallo])"
+        if: ${{ env.INYECTAR_DEFECTO == 'true' }}
+        run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
+      - name: Smoke test
+        run: bash quality/etapas/2-smoke.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-smoke
+          path: quality/out/
+          retention-days: 30
+
+  pruebas:
+    name: 3 - Pruebas unitarias y cobertura
+    needs: smoke
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: "Inyectar defecto (demostración del gate, solo si el commit dice [demo-fallo])"
+        if: ${{ env.INYECTAR_DEFECTO == 'true' }}
+        run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
+      - name: Pruebas y cobertura
+        run: bash quality/etapas/3-pruebas.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-pruebas
+          path: quality/out/
+          retention-days: 30
+
+  duplicacion:
+    name: 4 - Duplicación de código
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Duplicación (jscpd)
+        run: bash quality/etapas/4-duplicacion.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-duplicacion
+          path: quality/out/
+          retention-days: 30
 
-      - name: "Inyectar defecto (demostración del gate, solo si el commit dice [demo-fallo])"
-        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[demo-fallo]') }}
-        run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
-
-      - name: Pipeline de calidad (quality/run-local.sh)
-        run: bash quality/run-local.sh
-
+  quality-gate:
+    name: 5 - Quality gate
+    needs: [compilacion, smoke, pruebas, duplicacion]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reunir los reportes de las etapas
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: out-*
+          merge-multiple: true
+          path: quality/out
+      - name: Quality gate
+        run: bash quality/etapas/5-gate.sh
       - name: Publicar reportes (cobertura HTML, SARIF, duplicación, resultados de pruebas)
         if: always()
         uses: actions/upload-artifact@v4
