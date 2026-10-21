@@ -3,13 +3,20 @@ name: CI - Calidad de los juegos
 # Se ejecuta en cada push y pull request. Corre el mismo script que se usa en local: quality/run-local.sh
 on:
   push:
+    branches: [feature/tpcalidad]
   pull_request:
+    branches: [feature/tpcalidad]
   workflow_dispatch:
+    inputs:
+      inyectar_defecto:
+        description: "Demostración del quality gate: rompe a propósito la regla de la pista (>= por >) antes de correr. Debe fallar."
+        type: boolean
+        default: false
 
 jobs:
   calidad:
     name: Compilación, pruebas, cobertura, análisis estático y quality gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,6 +30,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Inyectar defecto (solo demostración, solo en este runner)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.inyectar_defecto }}
+        run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
 
       - name: Pipeline de calidad (quality/run-local.sh)
         run: bash quality/run-local.sh
