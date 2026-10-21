@@ -71,6 +71,13 @@ def duplicacion():
     return {"porcentaje": total["percentage"], "clones": total["clones"], "lineas": total["lines"]}
 
 
+def stress():
+    ruta = os.path.join(OUT, "stress", "resultados.json")
+    if not os.path.exists(ruta):
+        return None
+    return json.load(open(ruta, encoding="utf-8"))
+
+
 def fila(nombre, valor, umbral, ok):
     return f"| {'✅' if ok else '❌'} | {nombre} | {valor} | {umbral} |"
 
@@ -102,6 +109,19 @@ def main():
     ok = a is not None and not a["bloqueantes"]
     detalle = "sin datos" if a is None else f"{a['total']} hallazgos {a['por_tipo']}; bloqueantes: {len(a['bloqueantes'])}"
     filas.append(fila("Análisis estático (bugs Blocker/Critical)", detalle, "0 bloqueantes", ok))
+    ok_total &= ok
+
+    st = stress()
+    ok = st is not None and st["ok"]
+    if st is None:
+        detalle = "sin datos"
+    else:
+        p99 = max(e["p99Micros"] for e in st["stress"])
+        so = st["sostenido"]
+        detalle = (f"{len(st['stress'])} escenarios, p99 máx {p99:.0f} µs; sostenido {so['segundos']} s: "
+                   f"rendimiento {so['ratio']*100:.0f} % del inicial, memoria {so['crecimientoMB']:+.1f} MB; "
+                   f"fallas: {len(st['fallas'])}")
+    filas.append(fila("Stress y esfuerzo sostenido", detalle, "0 fallas (p99, degradación, memoria)", ok))
     ok_total &= ok
 
     resumen = ["## Quality gate: " + ("✅ APROBADO" if ok_total else "❌ RECHAZADO"), "",

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Pruebas de stress y de esfuerzo sostenido sobre la lógica de los juegos (la misma que compila Juegos.Logica). -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ServerGarbageCollector>false</ServerGarbageCollector>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Juegos.Logica/Juegos.Logica.csproj" />
+  </ItemGroup>
+
+</Project>

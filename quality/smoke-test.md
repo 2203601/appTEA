@@ -4,7 +4,7 @@ Versión 2 · dos partes que se complementan.
 
 ## Parte A – Smoke automático (lo ejecuta el pipeline)
 
-11 pruebas marcadas `[Category("Smoke")]`, entre 1 y 3 por juego, que verifican lo esencial de la lógica: se arma el par en Memoria, la pista aparece tras 2 fallos, el temporizador dispara en el umbral, la pausa congela el avance, se completa un hueco en Completar y un trazo en Línea.
+13 pruebas marcadas `[Category("Smoke")]`, entre 1 y 3 por juego, que verifican lo esencial de la lógica: se arma el par en Memoria, la pista aparece tras 2 fallos, el temporizador dispara en el umbral, la pausa congela el avance, se completa un hueco en Completar, un trazo en Línea, y la subida de sesiones (contrato de la integración y cola sin conexión).
 
 - Se ejecuta solo en cada push: paso "Smoke test automático" de `bash quality/run-local.sh` y del CI. Dura milisegundos.
 - Sale como primera fila del quality gate. Si falla, el gate rechaza.

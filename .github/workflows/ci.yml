@@ -2,8 +2,8 @@ name: CI - Calidad de los juegos
 
 # Pipeline en etapas encadenadas (cada etapa es un script de quality/etapas/, el mismo que corre en local):
 #
-#   Compilación + análisis estático -> Smoke -> Pruebas + cobertura --+
-#   Duplicación (en paralelo) ----------------------------------------+-> Quality gate
+#   Compilación + análisis estático -> Smoke -> Pruebas + cobertura -> Stress y esfuerzo --+
+#   Duplicación (en paralelo) -------------------------------------------------------------+-> Quality gate
 #
 # Si una etapa falla, las siguientes no corren; el quality gate corre siempre y resume lo que haya.
 on:
@@ -94,9 +94,29 @@ jobs:
           path: quality/out/
           retention-days: 30
 
+  stress:
+    name: 5 - Stress y esfuerzo sostenido
+    needs: pruebas
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Stress y esfuerzo sostenido (STRESS_SEGUNDOS = duración del esfuerzo sostenido)
+        env:
+          STRESS_SEGUNDOS: 60
+        run: bash quality/etapas/5-stress.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-stress
+          path: quality/out/
+          retention-days: 30
+
   quality-gate:
-    name: 5 - Quality gate
-    needs: [compilacion, smoke, pruebas, duplicacion]
+    name: 6 - Quality gate
+    needs: [compilacion, smoke, pruebas, duplicacion, stress]
     if: ${{ always() }}
     runs-on: ubuntu-24.04
     steps:
@@ -109,7 +129,7 @@ jobs:
           merge-multiple: true
           path: quality/out
       - name: Quality gate
-        run: bash quality/etapas/5-gate.sh
+        run: bash quality/etapas/6-gate.sh
       - name: Publicar reportes (cobertura HTML, SARIF, duplicación, resultados de pruebas)
         if: always()
         uses: actions/upload-artifact@v4
