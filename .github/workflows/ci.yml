@@ -7,11 +7,6 @@ on:
   pull_request:
     branches: [feature/tpcalidad]
   workflow_dispatch:
-    inputs:
-      inyectar_defecto:
-        description: "Demostración del quality gate: rompe a propósito la regla de la pista (>= por >) antes de correr. Debe fallar."
-        type: boolean
-        default: false
 
 jobs:
   calidad:
@@ -31,8 +26,8 @@ jobs:
         with:
           node-version: 20
 
-      - name: Inyectar defecto (solo demostración, solo en este runner)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.inyectar_defecto }}
+      - name: Inyectar defecto (demostración del gate: solo si el commit dice [demo-fallo])
+        if: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[demo-fallo]') }}
         run: sed -i 's/Fallos >= FallosParaPista/Fallos > FallosParaPista/' "My project/Assets/_Scripts/Comun/Logica/RondaDeOpciones.cs"
 
       - name: Pipeline de calidad (quality/run-local.sh)
