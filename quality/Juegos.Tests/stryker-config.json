@@ -1,0 +1,22 @@
+{
+  "stryker-config": {
+    "project": "Juegos.Logica.csproj",
+    "test-projects": [
+      "Juegos.Tests.csproj"
+    ],
+    "configuration": "Release",
+    "reporters": [
+      "json",
+      "html",
+      "progress"
+    ],
+    "thresholds": {
+      "high": 90,
+      "low": 70,
+      "break": 0
+    },
+    "mutate": [
+      "**/Logica/**/*.cs"
+    ]
+  }
+}

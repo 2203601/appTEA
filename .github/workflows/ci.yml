@@ -2,8 +2,8 @@ name: CI - Calidad de los juegos
 
 # Pipeline en etapas encadenadas (cada etapa es un script de quality/etapas/, el mismo que corre en local):
 #
-#   Compilación + análisis estático -> Smoke -> Pruebas + cobertura -> Stress y esfuerzo --+
-#   Duplicación (en paralelo) -------------------------------------------------------------+-> Quality gate
+#   Compilación + análisis estático -> Smoke -> Pruebas + cobertura -+-> Stress y esfuerzo --+
+#   Duplicación (en paralelo) ---------------------------------------+-> Mutación ----------+-> Quality gate
 #
 # Si una etapa falla, las siguientes no corren; el quality gate corre siempre y resume lo que haya.
 on:
@@ -114,9 +114,27 @@ jobs:
           path: quality/out/
           retention-days: 30
 
+  mutacion:
+    name: 6 - Pruebas de mutación
+    needs: pruebas
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Pruebas de mutación (Stryker.NET)
+        run: bash quality/etapas/6-mutacion.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-mutacion
+          path: quality/out/
+          retention-days: 30
+
   quality-gate:
-    name: 6 - Quality gate
-    needs: [compilacion, smoke, pruebas, duplicacion, stress]
+    name: 7 - Quality gate
+    needs: [compilacion, smoke, pruebas, duplicacion, stress, mutacion]
     if: ${{ always() }}
     runs-on: ubuntu-24.04
     steps:
@@ -129,7 +147,7 @@ jobs:
           merge-multiple: true
           path: quality/out
       - name: Quality gate
-        run: bash quality/etapas/6-gate.sh
+        run: bash quality/etapas/7-gate.sh
       - name: Publicar reportes (cobertura HTML, SARIF, duplicación, resultados de pruebas)
         if: always()
         uses: actions/upload-artifact@v4

@@ -18,6 +18,7 @@ OUT = os.path.join(QUALITY, "out")
 
 MIN_COBERTURA = float(os.environ.get("MIN_COBERTURA", "80"))
 MAX_DUPLICACION = float(os.environ.get("MAX_DUPLICACION", "5"))
+MIN_MUTACION = float(os.environ.get("MIN_MUTACION", "85"))
 SEVERIDADES_BLOQUEANTES = ("Blocker", "Critical")
 TIPOS_BLOQUEANTES = ("Bug", "Vulnerability")
 
@@ -78,6 +79,20 @@ def stress():
     return json.load(open(ruta, encoding="utf-8"))
 
 
+def mutacion():
+    ruta = os.path.join(OUT, "mutacion", "reports", "mutation-report.json")
+    if not os.path.exists(ruta):
+        return None
+    estados = {}
+    for archivo in json.load(open(ruta, encoding="utf-8"))["files"].values():
+        for m in archivo["mutants"]:
+            estados[m["status"]] = estados.get(m["status"], 0) + 1
+    detectados = estados.get("Killed", 0) + estados.get("Timeout", 0)
+    evaluados = detectados + estados.get("Survived", 0) + estados.get("NoCoverage", 0)
+    return {"puntaje": 100.0 * detectados / evaluados if evaluados else 0.0, "detectados": detectados,
+            "evaluados": evaluados, "sobrevivientes": estados.get("Survived", 0), "sin_cobertura": estados.get("NoCoverage", 0)}
+
+
 def fila(nombre, valor, umbral, ok):
     return f"| {'✅' if ok else '❌'} | {nombre} | {valor} | {umbral} |"
 
@@ -122,6 +137,13 @@ def main():
                    f"rendimiento {so['ratio']*100:.0f} % del inicial, memoria {so['crecimientoMB']:+.1f} MB; "
                    f"fallas: {len(st['fallas'])}")
     filas.append(fila("Stress y esfuerzo sostenido", detalle, "0 fallas (p99, degradación, memoria)", ok))
+    ok_total &= ok
+
+    mu = mutacion()
+    ok = mu is not None and mu["puntaje"] >= MIN_MUTACION
+    detalle = "sin datos" if mu is None else (f"{mu['puntaje']:.1f} % ({mu['detectados']}/{mu['evaluados']} mutantes detectados; "
+                                              f"{mu['sobrevivientes']} sobreviven, {mu['sin_cobertura']} sin cobertura)")
+    filas.append(fila("Pruebas de mutación (Stryker.NET)", detalle, f">= {MIN_MUTACION:.0f} %", ok))
     ok_total &= ok
 
     resumen = ["## Quality gate: " + ("✅ APROBADO" if ok_total else "❌ RECHAZADO"), "",

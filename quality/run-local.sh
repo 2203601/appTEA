@@ -10,4 +10,5 @@ bash etapas/2-smoke.sh
 bash etapas/3-pruebas.sh
 bash etapas/4-duplicacion.sh
 bash etapas/5-stress.sh
-bash etapas/6-gate.sh
+bash etapas/6-mutacion.sh
+bash etapas/7-gate.sh
