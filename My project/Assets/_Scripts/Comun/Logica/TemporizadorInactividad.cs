@@ -1,6 +1,4 @@
-// Cuenta tiempo sin actividad para disparar una pista (ej. 20 s en Encajar, 3 min en Memoria).
-// Se alimenta con Time.deltaTime, así que con la pausa (timeScale = 0) no avanza.
-// Dispara UNA vez por ciclo; Reiniciar() lo vuelve a armar.
+// Cuenta tiempo sin actividad para disparar una pista. Dispara una sola vez hasta que se llame a Reiniciar().
 public class TemporizadorInactividad
 {
     public float Umbral { get; set; }
@@ -19,7 +17,6 @@ public class TemporizadorInactividad
         disparado = false;
     }
 
-    // true solo en el cuadro en que se cruza el umbral
     public bool Avanzar(float deltaSegundos)
     {
         if (disparado) return false;

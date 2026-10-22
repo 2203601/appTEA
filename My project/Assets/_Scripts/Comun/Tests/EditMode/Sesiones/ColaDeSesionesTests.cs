@@ -55,14 +55,14 @@ public class ColaDeSesionesTests
     [Category("Smoke")]
     public void Vaciar_ConFallaDeRed_SeDetieneYConservaLasPendientes()
     {
-        // Arrange: la primera sube, la segunda encuentra la red caída
+        // Arrange
         var transporte = new TransporteFalso().Responde(200).SinRed();
         ColaDeSesiones cola = ColaCon(3);
 
         // Act
         ResumenVaciado resumen = cola.Vaciar(new ClienteSubida(transporte), Token);
 
-        // Assert: no insiste con la tercera mientras no haya red
+        // Assert
         Assert.AreEqual(1, resumen.Subidas);
         Assert.AreEqual(2, resumen.Pendientes);
         Assert.IsTrue(resumen.Detenida);
@@ -77,8 +77,8 @@ public class ColaDeSesionesTests
         ColaDeSesiones cola = ColaCon(2);
         var cliente = new ClienteSubida(transporte);
 
-        cola.Vaciar(cliente, Token);                       // sin red: no sube nada
-        ResumenVaciado segundo = cola.Vaciar(cliente, Token);   // con red: sube las dos
+        cola.Vaciar(cliente, Token);
+        ResumenVaciado segundo = cola.Vaciar(cliente, Token);
 
         Assert.AreEqual(2, segundo.Subidas);
         Assert.AreEqual(0, cola.Pendientes);

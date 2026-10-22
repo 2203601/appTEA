@@ -2,22 +2,18 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-// Casos límite y de geometría del seguimiento del trazo (surgidos de los mutantes que sobrevivían).
 public class SeguidorTrazoLimitesTests
 {
     const float Tolerancia = 10f;
 
     static List<Punto2> Recta200() => new List<Punto2> { new Punto2(0f, 0f), new Punto2(200f, 0f) };
 
-    // Camino en L: 100 hacia la derecha y 100 hacia arriba (largo total 200)
     static List<Punto2> CaminoEnL() => new List<Punto2> { new Punto2(0f, 0f), new Punto2(100f, 0f), new Punto2(100f, 100f) };
 
     static void Mover(SeguidorTrazo seguidor, float x, float y)
     {
         seguidor.Actualizar(new Punto2(x, y));
     }
-
-    // ---------- Constructor ----------
 
     [Test]
     public void Constructor_ConPuntosNulos_LanzaArgumentException()
@@ -58,8 +54,6 @@ public class SeguidorTrazoLimitesTests
         Assert.Throws<ArgumentException>(() => new SeguidorTrazo(puntos, Tolerancia));
     }
 
-    // ---------- Inicio ----------
-
     [Test]
     public void PuedeEmpezar_AExactamenteLaTolerancia_EsValido()
     {
@@ -68,8 +62,6 @@ public class SeguidorTrazoLimitesTests
         Assert.IsTrue(seguidor.PuedeEmpezar(new Punto2(0f, 10f)));
         Assert.IsFalse(seguidor.PuedeEmpezar(new Punto2(0f, 10.5f)));
     }
-
-    // ---------- Distancia y margen ----------
 
     [Test]
     public void Actualizar_InformaLaDistanciaAlCamino()
@@ -103,8 +95,6 @@ public class SeguidorTrazoLimitesTests
         Assert.AreEqual(0f, seguidor.Progreso, 0.0001f);
     }
 
-    // ---------- Progreso ----------
-
     [Test]
     public void Progreso_EnLaMitadDeLaRecta_EsUnMedio()
     {
@@ -134,8 +124,6 @@ public class SeguidorTrazoLimitesTests
         for (float x = 190f; x <= 200f; x += 5f) Mover(seguidor, x, 0f);         // 100 %
         Assert.IsTrue(seguidor.Completo);
     }
-
-    // ---------- Ventana: no se puede saltar hacia adelante ----------
 
     [Test]
     public void Actualizar_ConUnSaltoMasAllaDeLaVentana_NoAvanza()
@@ -172,14 +160,12 @@ public class SeguidorTrazoLimitesTests
         Assert.IsFalse(float.IsNaN(seguidor.Distancia));
     }
 
-    // ---------- Reiniciar ----------
-
     [Test]
     public void Reiniciar_VuelveAlEstadoInicialYPermiteAvanzarOtraVez()
     {
         var seguidor = new SeguidorTrazo(Recta200(), Tolerancia);
         for (float x = 0f; x <= 100f; x += 10f) Mover(seguidor, x, 0f);
-        Mover(seguidor, 100f, 50f);   // se sale del camino
+        Mover(seguidor, 100f, 50f);
 
         seguidor.Reiniciar();
 
@@ -189,8 +175,6 @@ public class SeguidorTrazoLimitesTests
         Mover(seguidor, 10f, 0f);
         Assert.Greater(seguidor.Progreso, 0f);
     }
-
-    // ---------- Dirección de la flecha ----------
 
     [Test]
     public void DireccionActual_AlPrincipioDeUnaRectaHorizontal_ApuntaALaDerecha()

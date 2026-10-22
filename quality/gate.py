@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Quality gate del pipeline. Lee los reportes de quality/out y falla (exit 1) si no se cumplen los umbrales.
 
-Umbrales (consigna del TP, nivel declarado):
+Umbrales :
   - todas las pruebas pasan
   - cobertura de líneas de la lógica de los juegos >= MIN_COBERTURA
   - duplicación de código de los juegos <= MAX_DUPLICACION

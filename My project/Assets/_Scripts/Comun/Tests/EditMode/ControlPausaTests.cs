@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-// Regresión del defecto: en Encajar (Difícil) se podían mover las piezas con el panel de pausa abierto.
+// Regresión de D-01: en Encajar (Difícil) se podían mover las piezas con la pausa abierta.
 public class ControlPausaTests
 {
     [Test]
@@ -29,11 +29,11 @@ public class ControlPausaTests
     [Category("Smoke")]
     public void EnPausa_LaPistaNoAvanzaNiConPasoDeTiempoGrande()
     {
-        // Arrange: se simula el Update del juego, que corta el cuadro si está en pausa
+        // Arrange
         var temporizador = new TemporizadorInactividad(20f);
         bool disparo = false;
 
-        // Act: 100 cuadros de 1 s con el juego en pausa
+        // Act
         for (int i = 0; i < 100; i++)
         {
             if (ControlPausa.EnPausa(0f)) continue;

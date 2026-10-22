@@ -5,8 +5,6 @@ public class RondaDeOpcionesTests
 {
     static readonly string[] Todas = { "alegre", "triste", "enojado", "asustado", "sorprendido", "cansado" };
 
-    // ---- Responder: fallos y pista -----------------------------------------------------------
-
     [Test]
     public void PrimerFallo_NoActivaLaPista()
     {
@@ -100,8 +98,6 @@ public class RondaDeOpcionesTests
     {
         Assert.AreEqual(2, new RondaDeOpciones().FallosParaPista);
     }
-
-    // ---- ElegirOpciones ----------------------------------------------------------------------
 
     [Test]
     public void ElegirOpciones_IncluyeSiempreLaCorrecta_YRespetaLaCantidad()

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 public enum ResultadoRespuesta
 {
     Acierto,
-    Fallo,          // falló, pero todavía no toca la pista
-    FalloConPista   // alcanzó los fallos que activan la pista
+    Fallo,
+    FalloConPista
 }
 
-// Clase C# pura (no MonoBehaviour): reglas de una ronda con varias opciones, compartidas por
-// Emociones y Encajar (Fácil/Medio): armado de las opciones y conteo de fallos hasta la pista.
+// Reglas de una ronda con varias opciones, compartidas por Emociones y Encajar (Fácil/Medio).
 public class RondaDeOpciones
 {
     public int FallosParaPista { get; }
@@ -20,7 +19,7 @@ public class RondaDeOpciones
         FallosParaPista = fallosParaPista;
     }
 
-    // Una respuesta del niño. Los fallos solo se cuentan mientras la ronda no esté resuelta.
+    // Los fallos solo se cuentan mientras la ronda no esté resuelta.
     public ResultadoRespuesta Responder(bool esCorrecta)
     {
         if (esCorrecta)
@@ -33,7 +32,6 @@ public class RondaDeOpciones
         return Fallos >= FallosParaPista ? ResultadoRespuesta.FalloConPista : ResultadoRespuesta.Fallo;
     }
 
-    // La correcta más (cantidad - 1) distractores distintos, todo mezclado.
     // Si no hay suficientes distractores, devuelve los que haya.
     public static List<T> ElegirOpciones<T>(IList<T> todas, T correcta, int cantidad, System.Random azar)
     {

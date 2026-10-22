@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-// Contrato de subida de una sesión (función upload_game_session de Supabase):
-// arma el JSON exacto y valida los datos ANTES de enviarlos, con las mismas reglas que la base.
+// Contrato de la función upload_game_session de Supabase: arma el JSON y valida los datos antes de enviarlos.
 public static class ContratoSubida
 {
     public const string Ruta = "/rest/v1/rpc/upload_game_session";
@@ -49,7 +48,6 @@ public static class ContratoSubida
         return errores;
     }
 
-    // JSON del cuerpo del POST. "metrics" y "details" solo se mandan si hay datos.
     public static string ConstruirPayload(Guid perfilId, SesionDeJuego s)
     {
         var j = new StringBuilder();

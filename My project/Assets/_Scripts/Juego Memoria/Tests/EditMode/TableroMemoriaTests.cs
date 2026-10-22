@@ -6,8 +6,6 @@ public class TableroMemoriaTests
     // posiciones: 0 gato, 1 perro, 2 gato, 3 perro
     static TableroMemoria Tablero() => new TableroMemoria(new[] { "gato", "perro", "gato", "perro" });
 
-    // ---- Seleccionar ------------------------------------------------------------------------
-
     [Test]
     public void PrimeraCarta_QuedaSeleccionada()
     {
@@ -108,8 +106,6 @@ public class TableroMemoriaTests
         Assert.IsFalse(tablero.Terminado);
     }
 
-    // ---- Pista ------------------------------------------------------------------------------
-
     [Test]
     public void Pista_SinCartasDadasVuelta_ApuntaALaPrimeraSinEncontrar()
     {
@@ -154,14 +150,12 @@ public class TableroMemoriaTests
         Assert.AreEqual(-1, tablero.PosicionParaPista());
     }
 
-    // ---- Armado del mazo --------------------------------------------------------------------
-
     [Test]
     public void CantidadPares_UsaLoQuePideLaDificultad_SiHayCartasSuficientes()
     {
         Assert.AreEqual(4, TableroMemoria.CantidadPares(4, 10));
         Assert.AreEqual(6, TableroMemoria.CantidadPares(6, 10));
-        Assert.AreEqual(8, TableroMemoria.CantidadPares(8, 8));   // valor límite
+        Assert.AreEqual(8, TableroMemoria.CantidadPares(8, 8));
     }
 
     [Test]

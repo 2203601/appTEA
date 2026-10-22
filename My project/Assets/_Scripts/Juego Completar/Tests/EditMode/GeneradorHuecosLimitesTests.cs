@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 
-// Casos límite del generador de huecos (surgidos de los mutantes que sobrevivían).
 public class GeneradorHuecosLimitesTests
 {
     const string DiccionarioChico = "MASA\nMISA\nPESA\nTESA\nMOSA\n";
 
     static GeneradorHuecos Generador(int semilla = 1) => new GeneradorHuecos(DiccionarioChico, new System.Random(semilla));
-
-    // ---------- Guardas de GenerarHuecosPalabra ----------
 
     [TestCase(null)]
     [TestCase("")]
@@ -39,8 +36,6 @@ public class GeneradorHuecosLimitesTests
         Assert.AreEqual("", huecos[0].distractores);
     }
 
-    // ---------- Cantidad de huecos contra letras ocultables ----------
-
     [Test]
     public void GenerarHuecosPalabra_PidiendoTantosHuecosComoLetrasOcultables_Alcanza()
     {
@@ -67,8 +62,6 @@ public class GeneradorHuecosLimitesTests
         Assert.AreEqual(2, huecos.Count);
     }
 
-    // ---------- Distractores disponibles justos ----------
-
     [Test]
     public void GenerarHuecosPalabra_ConExactamenteLosDistractoresDisponibles_Alcanza()
     {
@@ -84,8 +77,6 @@ public class GeneradorHuecosLimitesTests
     {
         Assert.IsNull(Generador().GenerarHuecosPalabra("AEIOU", 1, 6));
     }
-
-    // ---------- Secuencias de números ----------
 
     [Test]
     public void GenerarSecuenciaNumeros_PorTodasLasSemillas_SonCuatroDigitosConsecutivosHastaNueve()

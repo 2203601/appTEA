@@ -1,14 +1,10 @@
 using System;
 using NUnit.Framework;
 
-// Mensajes de validación, escape de caracteres de control y valores límite del contrato
-// (surgidos de los mutantes que sobrevivían: antes solo se comprobaba que "hubiera algún error").
 public class ContratoSubidaMensajesTests
 {
     static string Errores(Guid perfil, SesionDeJuego sesion) =>
         string.Join(" | ", ContratoSubida.Validar(perfil, sesion));
-
-    // ---------- Mensajes: cada regla señala el campo que falla ----------
 
     [Test]
     public void Validar_SesionNula_IndicaQueLaSesionEsNula()
@@ -106,8 +102,6 @@ public class ContratoSubidaMensajesTests
         StringAssert.Contains("vacía", errores);
     }
 
-    // ---------- Valores límite: el cero es válido ----------
-
     [Test]
     public void Validar_ContadoresEnCero_SonValidos()
     {
@@ -132,8 +126,6 @@ public class ContratoSubidaMensajesTests
             Assert.IsNotEmpty(ContratoSubida.Validar(SesionesDePrueba.Perfil, sesion), "contador " + cual);
         }
     }
-
-    // ---------- Payload: valores falsos y nulos ----------
 
     [Test]
     public void Payload_SesionNoCompletadaYSinDificultad_EnviaFalseYNull()
@@ -160,8 +152,6 @@ public class ContratoSubidaMensajesTests
         StringAssert.Contains("\"metric_value\":1},{\"id\":\"66666666", json);
         StringAssert.EndsWith("\"metric_value\":2.5}]}", json);
     }
-
-    // ---------- Payload: escape de caracteres ----------
 
     [Test]
     public void Payload_EscapaSaltosDeLineaYTabulaciones()

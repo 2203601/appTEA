@@ -6,13 +6,11 @@ public class ResumenVaciado
     public int Subidas { get; set; }
     public int Rechazadas { get; set; }
     public int Pendientes { get; set; }
-    public bool Detenida { get; set; }              // se cortó por red caída o falta de autorización
+    public bool Detenida { get; set; }
     public ResultadoSubida? Motivo { get; set; }
 }
 
-// Cola de sesiones pendientes de subir (funciona sin conexión permanente).
-// Se envían en orden. Una falla transitoria o de autorización DETIENE el vaciado y conserva todo.
-// Una sesión rechazada de forma definitiva se aparta para que no trabe a las demás.
+// Se envían en orden. Una falla transitoria o de autorización detiene el vaciado; una sesión rechazada se aparta.
 public class ColaDeSesiones
 {
     class Entrada
@@ -27,7 +25,6 @@ public class ColaDeSesiones
     public int Pendientes => pendientes.Count;
     public IReadOnlyList<SesionDeJuego> Rechazadas => rechazadas;
 
-    // false si la sesión no es válida o ya estaba en la cola (mismo id)
     public bool Encolar(Guid perfilId, SesionDeJuego sesion)
     {
         if (ContratoSubida.Validar(perfilId, sesion).Count > 0) return false;

@@ -4,7 +4,6 @@ using NUnit.Framework;
 
 public class ContratoSubidaTests
 {
-    // ---------- Payload ----------
 
     [Test]
     [Category("Smoke")]
@@ -105,8 +104,6 @@ public class ContratoSubidaTests
 
         Assert.AreEqual(primero, segundo);
     }
-
-    // ---------- Validación (clases de equivalencia y valores límite) ----------
 
     [Test]
     public void Validar_SesionCorrecta_NoTieneErrores()

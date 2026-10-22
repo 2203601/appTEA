@@ -4,12 +4,11 @@ public enum ResultadoSeleccion
 {
     Ignorada,       // carta ya encontrada, repetida o con el tablero esperando a que se tapen
     PrimeraCarta,
-    Par,            // la segunda carta coincide: quedan encontradas
+    Par,
     NoPar           // la segunda no coincide: hay que llamar a TaparSeleccion()
 }
 
-// Clase C# pura (no MonoBehaviour): estado del tablero de Memoria. Las cartas se identifican
-// por su posición en el tablero; "nombres" dice qué carta hay en cada posición.
+// Estado del tablero de Memoria. Las cartas se identifican por su posición en el tablero.
 public class TableroMemoria
 {
     readonly string[] nombres;
@@ -35,7 +34,6 @@ public class TableroMemoria
         return System.Math.Max(0, System.Math.Min(paresObjetivo, cartasDisponibles));
     }
 
-    // Elige `pares` cartas al azar y las duplica; el resultado queda mezclado.
     public static List<T> ArmarMazo<T>(IList<T> disponibles, int pares, System.Random azar)
     {
         List<T> elegidas = new List<T>(disponibles);
@@ -72,7 +70,6 @@ public class TableroMemoria
         return ResultadoSeleccion.NoPar;
     }
 
-    // Después de un NoPar, las dos cartas se vuelven a tapar.
     public void TaparSeleccion()
     {
         seleccion.Clear();

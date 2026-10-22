@@ -13,6 +13,7 @@ Cada defecto tiene pasos, resultado esperado, resultado obtenido, el caso de pru
 | D-03 | Pipeline: los `.csproj` de `quality/` no llegaban al repositorio | Proceso | Alta | Corregido |
 | D-04 | Pipeline: el análisis estático daba 0 hallazgos por un `obj/` compartido | Proceso | Media | Corregido |
 | D-05 | Pipeline: `ci.yml` con YAML inválido | Proceso | Alta | Corregido |
+| D-06 | Pipeline: el job de mutación fallaba en GitHub porque el runner usaba el SDK 10 de .NET | Proceso | Alta | Corregido |
 
 ---
 
@@ -89,6 +90,24 @@ Cada defecto tiene pasos, resultado esperado, resultado obtenido, el caso de pru
 - **Corrección:** nombre del paso entre comillas.
 - **Commit:** `a330366`.
 - **Caso de prueba:** ejecución verde posterior en GitHub (`91dbce8`).
+
+---
+
+## D-06 · Pipeline: el job de mutación fallaba en GitHub (SDK 10 de .NET)
+
+- **Origen / módulo:** Proceso · etapa 6 (`quality/etapas/6-mutacion.sh`), Stryker.NET 4.8.1
+- **Severidad:** Alta (el quality gate quedaba sin dato de mutación y el pipeline en rojo)
+- **Cómo se encontró:** primera ejecución del job nuevo en GitHub Actions. En local y en un contenedor Linux con solo el SDK 8 funcionaba.
+- **Pasos para reproducir**
+  1. Ejecutar el job en un runner con varios SDK de .NET instalados (8, 9 y 10).
+  2. O, en un contenedor con los SDK 10 y 8, correr `dotnet tool run dotnet-stryker` sin `global.json`.
+- **Resultado esperado:** Stryker evalúa los mutantes y genera el reporte.
+- **Resultado obtenido:** `System.FormatException: Commandline could not be parsed`. El comando `dotnet` usaba el SDK más nuevo (10.0), con el que Stryker 4.8.1 no es compatible.
+- **Diagnóstico:** el script ocultaba el detalle del error. Se cambió para guardar el log completo y mostrarlo al fallar; con eso apareció la causa.
+- **Corrección:** `quality/global.json` fija el SDK 8 (`rollForward: latestFeature`) para todo el pipeline.
+- **Commits:** "Mutacion: mostrar el log completo si Stryker falla" y "Fijar SDK 8 para el pipeline".
+- **Caso de prueba:** ejecución del job "6 - Pruebas de mutación" en GitHub: 695 mutantes, puntaje 91,79 %.
+- **Contraste rojo/verde:** rojo en GitHub (job fallido con la excepción); verde tras el `global.json`. Reproducido también en un contenedor con los SDK 10 y 8.
 
 ---
 

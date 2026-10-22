@@ -1,13 +1,4 @@
-// Stress y esfuerzo sostenido de la lógica de los juegos.
-//
-//  - STRESS: muchas partidas completas de cada juego, en paralelo en todos los núcleos.
-//    Mide partidas por segundo y latencia por partida (p50, p95, p99, máximo).
-//  - ESFUERZO SOSTENIDO: los cinco juegos en ronda durante N segundos.
-//    Mide si el rendimiento se degrada (partidas por segundo, inicio contra final) y si la memoria crece.
-//
-// Cada partida verifica sus invariantes (ej.: el tablero de Memoria termina, el trazo se completa):
-// una partida que rompe una regla cuenta como error. Los umbrales se pueden ajustar con variables de entorno.
-//
+// Stress y esfuerzo sostenido de la lógica de los juegos. Los umbrales se ajustan con variables de entorno STRESS_*.
 // Uso: dotnet run -c Release --project quality/Juegos.Stress -- <carpeta de salida> [segundos de esfuerzo]
 using System.Diagnostics;
 using System.Text.Json;
@@ -29,7 +20,6 @@ Console.WriteLine($"Núcleos: {Environment.ProcessorCount} · partidas por escen
 
 var escenarios = Escenarios.Todos;
 
-// ---------- STRESS ----------
 var resultadosStress = new List<ResultadoStress>();
 foreach (var (nombre, fabrica) in escenarios)
 {
@@ -38,12 +28,10 @@ foreach (var (nombre, fabrica) in escenarios)
     Console.WriteLine($"[stress] {r.Nombre,-28} {r.PartidasPorSeg,10:N0} partidas/s · p99 {r.P99Micros,8:N1} µs · errores {r.Errores}");
 }
 
-// ---------- ESFUERZO SOSTENIDO ----------
 Console.WriteLine($"[sostenido] corriendo {segundosSostenido} s…");
 var sostenido = Sostenido.Correr(escenarios, segundosSostenido);
 Console.WriteLine($"[sostenido] {sostenido.PartidasPorSegInicial:N0} → {sostenido.PartidasPorSegFinal:N0} partidas/s (ratio {sostenido.Ratio:F2}) · memoria {sostenido.MemoriaInicialMB:F1} → {sostenido.MemoriaFinalMB:F1} MB (+{sostenido.CrecimientoMB:F1}) · errores {sostenido.Errores}");
 
-// ---------- VEREDICTO ----------
 var fallas = new List<string>();
 foreach (var r in resultadosStress)
 {
@@ -70,8 +58,6 @@ File.WriteAllText(Path.Combine(salida, "resultados.json"),
 
 Console.WriteLine(fallas.Count == 0 ? "STRESS: OK" : "STRESS: FALLÓ\n - " + string.Join("\n - ", fallas));
 return fallas.Count == 0 ? 0 : 1;
-
-// =====================================================================
 
 static class Config
 {
@@ -140,7 +126,6 @@ static class Sostenido
         var azar = new Random(42);
         var jugar = escenarios.Select(e => e.Item2(azar)).ToArray();
 
-        // calentamiento
         for (int i = 0; i < 2000; i++) foreach (var j in jugar) j();
 
         GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
@@ -168,7 +153,6 @@ static class Sostenido
         GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
         double memFinal = GC.GetTotalMemory(true) / 1048576.0;
 
-        // inicio y final = primer y último 10 % de las ventanas de un segundo
         int n = Math.Max(1, porSegundo.Count / 10);
         double inicial = porSegundo.Count == 0 ? 0 : porSegundo.Take(n).Average();
         double final = porSegundo.Count == 0 ? 0 : porSegundo.Skip(porSegundo.Count - n).Average();
@@ -183,8 +167,7 @@ static class Escenarios
     static readonly string[] Animales = { "gato", "perro", "pato", "oveja", "jirafa", "tortuga", "conejo", "chancho", "carpincho" };
     static readonly string[] Emociones = { "alegria", "tristeza", "enojo", "miedo", "sorpresa", "calma" };
 
-    // (nombre, fábrica): la fábrica recibe un Random propio de cada hilo y devuelve una "partida" completa.
-    // La partida devuelve true si todas las reglas del juego se cumplieron.
+    // La fábrica recibe un Random propio de cada hilo y devuelve una partida completa: true si se cumplieron todas las reglas.
     public static List<(string, Func<Random, Func<bool>>)> Todos => new()
     {
         ("Memoria (8 pares)", Memoria),
@@ -200,8 +183,8 @@ static class Escenarios
         var tablero = new TableroMemoria(mazo);
         for (int pasos = 0; !tablero.Terminado && pasos < 100_000; pasos++)
         {
-            int pos = r.Next(-1, mazo.Count + 1);                 // incluye posiciones fuera del tablero
-            if (r.Next(3) == 0) pos = tablero.PosicionParaPista(); // a veces sigue la pista
+            int pos = r.Next(-1, mazo.Count + 1);
+            if (r.Next(3) == 0) pos = tablero.PosicionParaPista();
             var res = tablero.Seleccionar(pos);
             if (res == ResultadoSeleccion.NoPar) tablero.TaparSeleccion();
         }
@@ -264,7 +247,7 @@ static class Escenarios
         int disparos = 0;
         for (int cuadro = 0; cuadro < 2000; cuadro++)
         {
-            bool pausado = cuadro % 100 < 30;                       // 30 cuadros de cada 100 en pausa
+            bool pausado = cuadro % 100 < 30;
             float dt = ControlPausa.EnPausa(pausado ? 0f : 1f) ? 0f : 0.1f;
             if (temporizador.Avanzar(dt)) disparos++;
             if (cuadro % 700 == 699) temporizador.Reiniciar();

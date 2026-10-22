@@ -23,7 +23,6 @@ public class TransporteFalso : ITransporte
         return this;
     }
 
-    // Cuando se acaban las respuestas guionadas, repite la última
     public TransporteFalso LuegoSiempre(int codigo)
     {
         ultima = new RespuestaHttp(codigo);
@@ -79,6 +78,5 @@ public static class SesionesDePrueba
         return s;
     }
 
-    // Una sesión distinta por número, con id propio
     public static SesionDeJuego Numero(int n) => Basica("00000000-0000-0000-0000-" + n.ToString("D12"));
 }
