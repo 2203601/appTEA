@@ -1,6 +1,6 @@
 # Registro de defectos – módulo de juegos
 
-Versión 1 · rama `feature/tpcalidad`
+Versión 2 · rama `feature/tpcalidad`
 
 Cada defecto tiene pasos, resultado esperado, resultado obtenido, el caso de prueba que lo cubre y el commit de la corrección. Los defectos se clasifican por **origen**: del producto (juego) o del proceso (pipeline).
 
@@ -14,6 +14,7 @@ Cada defecto tiene pasos, resultado esperado, resultado obtenido, el caso de pru
 | D-04 | Pipeline: el análisis estático daba 0 hallazgos por un `obj/` compartido | Proceso | Media | Corregido |
 | D-05 | Pipeline: `ci.yml` con YAML inválido | Proceso | Alta | Corregido |
 | D-06 | Pipeline: el job de mutación fallaba en GitHub porque el runner usaba el SDK 10 de .NET | Proceso | Alta | Corregido |
+| D-07 | Memoria: al coincidir dos cartas no hay feedback | Producto | Media | Abierto |
 
 ---
 
@@ -106,8 +107,26 @@ Cada defecto tiene pasos, resultado esperado, resultado obtenido, el caso de pru
 - **Diagnóstico:** el script ocultaba el detalle del error. Se cambió para guardar el log completo y mostrarlo al fallar; con eso apareció la causa.
 - **Corrección:** `quality/global.json` fija el SDK 8 (`rollForward: latestFeature`) para todo el pipeline.
 - **Commits:** "Mutacion: mostrar el log completo si Stryker falla" y "Fijar SDK 8 para el pipeline".
+- **Jira:** TPC-11 (caso TC-06: TPC-12).
 - **Caso de prueba:** ejecución del job "6 - Pruebas de mutación" en GitHub: 695 mutantes, puntaje 91,79 %.
 - **Contraste rojo/verde:** rojo en GitHub (job fallido con la excepción); verde tras el `global.json`. Reproducido también en un contenedor con los SDK 10 y 8.
+
+## D-07 · Memoria: sin feedback al coincidir dos cartas
+
+- **Origen / módulo:** Producto · Memoria
+- **Severidad:** Media (desvío de la especificación: se espera feedback suave al acertar)
+- **Cómo se encontró:** smoke manual en el editor de Unity del 25/10/2026, paso M4.
+- **Pasos para reproducir**
+  1. Abrir la escena `JuegoMemoria` y dar Play.
+  2. Elegir Fácil.
+  3. Dar vuelta dos cartas que coinciden.
+- **Resultado esperado:** las cartas quedan visibles y hay feedback suave.
+- **Resultado obtenido:** no hay feedback al coincidir las cartas.
+- **Corrección:** pendiente. Queda para resolver desde Jira.
+- **Commit:** —
+- **Caso de prueba:** TC-07 (paso M4 de `smoke-test.md`); cargado en Jira como TPC-14. Cuando se corrija, repetir el smoke manual.
+- **Jira:** TPC-13 (caso TC-07: TPC-14).
+- **Estado:** abierto. Es el único paso obligatorio fallido del smoke manual (31 de 32 OK), por lo que el smoke queda fallido hasta que se corrija.
 
 ---
 

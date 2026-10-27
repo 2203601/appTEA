@@ -29,7 +29,7 @@ Las cifras de este documento salen de las ejecuciones del pipeline (GitHub Actio
 | Smoke automático | Subconjunto esencial de las anteriores (`Category("Smoke")`) | 13 pruebas | Pipeline, job 2 (primero) |
 | Stress y esfuerzo sostenido | 5 escenarios de partidas completas, en paralelo y durante 60 s | 5 escenarios | Pipeline, job 5 |
 | Mutación | Mide si las pruebas detectan defectos | 536 mutantes evaluados | Pipeline, job 6 |
-| Sistema (smoke manual) | Los cinco juegos en Unity, incluidas pausa y pistas | 35 pasos, 32 obligatorios | A mano, `quality/smoke-test.md` (pendiente de ejecutar) |
+| Sistema (smoke manual) | Los cinco juegos en Unity, incluidas pausa y pistas | 35 pasos, 32 obligatorios | A mano, `quality/smoke-test.md` (ejecutado el 25/10/2026 en el editor de Unity: 31 de 32 obligatorios OK, falla M4; D-07) |
 | Aceptación | Validación con las profesionales y con niños | — | Pendiente, fuera de este TP |
 
 Total de pruebas automáticas: **186**, todas en verde.
@@ -55,7 +55,7 @@ Total de pruebas automáticas: **186**, todas en verde.
 
 Criterios de salida adicionales, que el gate no verifica:
 - Ningún defecto de severidad Alta abierto.
-- Smoke manual ejecutado y con resultado registrado (pendiente).
+- Smoke manual ejecutado y con resultado registrado (ejecutado el 25/10/2026; resultado: fallido, por el paso M4 de Memoria, defecto D-07 de severidad Media, abierto).
 
 ## 3. Requisitos y trazabilidad
 
@@ -67,6 +67,7 @@ Los requisitos salen de las especificaciones de cada juego del proyecto; los ide
 | RF-MEM-02 | Dos cartas distintas no forman par y se vuelven a tapar sin sonido de error | `TableroMemoriaTests`: SegundaCartaDistinta_*, TrasUnNoPar_* | M3 | — |
 | RF-MEM-03 | A los 3 minutos sin acertar, brilla la carta que toca dar vuelta | `TableroMemoriaTests`: Pista_* · `TemporizadorInactividadTests` | M5, M6 | — |
 | RF-MEM-04 | El juego termina al encontrar todos los pares | `TableroMemoriaTests`: EncontrarTodosLosPares_*, TableroVacio_* | M7 | — |
+| RF-MEM-05 | Al coincidir dos cartas quedan visibles con feedback suave | Sin prueba automática (la regla vive en la escena) | M4 | **D-07** |
 | RF-ENC-01 | Encajar usa 3 formas (Fácil), 5 (Medio) y 7 rotadas (Difícil) | Sin prueba automática (lógica dentro de `GameManagerEncajar`) | E2, E6, E10 | — |
 | RF-ENC-02 | Una pieza incorrecta vuelve a su lugar sin sonido de error | Sin prueba automática | E3 | — |
 | RF-ENC-03 | A los 20 s sin tocar la pantalla brilla la pieza que corresponde | `TemporizadorInactividadTests` | E5 | — |
@@ -85,7 +86,7 @@ Los requisitos salen de las especificaciones de cada juego del proyecto; los ide
 | RT-05 | El rendimiento se mantiene bajo carga prolongada | Stress y esfuerzo sostenido (5 escenarios) | — | — |
 | RP-01 | El pipeline compila, analiza, prueba y decide en cada push | Ejecuciones del pipeline en GitHub Actions | — | **D-03, D-04, D-05, D-06** |
 
-**Huecos de trazabilidad (declarados):** RF-ENC-01, RF-ENC-02, RF-ENC-04, RF-COM-02 y RT-02 no tienen prueba automática. Dependen del smoke manual, que todavía no se ejecutó.
+**Huecos de trazabilidad (declarados):** RF-ENC-01, RF-ENC-02, RF-ENC-04, RF-COM-02 y RT-02 no tienen prueba automática. Dependen del smoke manual, que se ejecutó el 25/10/2026 y pasó en esos pasos (excepto M4, ver D-07). RF-MEM-05 tampoco tiene prueba automática.
 
 ## 4. Casos de prueba: técnicas aplicadas
 
@@ -163,9 +164,9 @@ Las pruebas automáticas siguen el formato Arrange–Act–Assert, con el result
 | Característica | Qué se verifica | Evidencia | Cobertura | Brecha |
 |---|---|---|---|---|
 | Adecuación funcional | Las reglas de cada juego y la subida de sesiones hacen lo que dice la especificación | 186 pruebas, 99,2 % de líneas, puntaje de mutación 91,79 % | **Alta** para la lógica | Encajar y las pistas de Completar no tienen prueba automática |
-| Eficiencia de desempeño | Rendimiento y memoria de la lógica bajo carga | Stress: 5 escenarios, p99 máximo entre 38 µs (GitHub) y 253 µs (local); 60 s sostenidos con rendimiento estable (103 % del inicial en GitHub) y memoria sin crecimiento | **Media** | No mide FPS ni memoria en una tablet real |
+| Eficiencia de desempeño | Rendimiento y memoria de la lógica bajo carga | Stress: 5 escenarios, p99 máximo entre 57 µs (GitHub, run #15) y 253 µs (local); 60 s sostenidos con rendimiento estable (102 % del inicial en GitHub) y memoria sin crecimiento | **Media** | No mide FPS ni memoria en una tablet real |
 | Compatibilidad | Interoperabilidad con el servicio externo; convivencia de entornos | Contrato de subida probado con dobles; la lógica corre en macOS y Linux | **Baja** | Sin prueba contra Supabase real ni con distintos dispositivos |
-| Usabilidad (capacidad de uso y accesibilidad) | Reglas TEA: errores silenciosos, pausa, pistas suaves, sin límite de tiempo | Pausa y pistas probadas en lógica; resto en el smoke manual | **Baja** | Smoke manual sin ejecutar; sin pruebas con niños ni profesionales |
+| Usabilidad (capacidad de uso y accesibilidad) | Reglas TEA: errores silenciosos, pausa, pistas suaves, sin límite de tiempo | Pausa y pistas probadas en lógica; resto en el smoke manual | **Baja** | Smoke manual ejecutado (31 de 32 obligatorios); sin pruebas con niños ni profesionales |
 | Fiabilidad | Tolerancia a fallos de red, reintentos sin duplicar, sesión que no se pierde | `ColaDeSesionesTests`, `ClienteSubidaTests` (reintento con mismo cuerpo, corte ante falla), D-01 | **Media** | La cola vive en memoria: se pierde si la app se cierra |
 | Seguridad | Autorización por token, validación de datos antes de enviar, acceso por fila en el esquema | Validación del contrato (42 pruebas); políticas del esquema verificadas en su momento contra un Postgres 16 en Docker | **Baja** en este pipeline | Las pruebas del esquema no están en el pipeline; sin pruebas contra Supabase real; datos de menores (Ley 25.326) |
 | Mantenibilidad | Modularidad, duplicación, deuda, capacidad de probar | Lógica separada en `Logica/`, duplicación 3,28 %, 4 code smells, mutación, pipeline en 7 etapas | **Alta** | Los `MonoBehaviour` siguen concentrando lógica en Encajar |
@@ -183,7 +184,7 @@ Probabilidad (P) e impacto (I) de 1 a 5; prioridad = P × I.
 
 | ID | Riesgo | P | I | Prioridad | Mitigación | Estado |
 |---|---|---|---|---|---|---|
-| R1 | El juego no se probó en Unity ni en una tablet: puede fallar algo que la lógica no ve (pausa en Difícil, pistas, escenas) | 4 | 4 | **16** | Ejecutar el smoke manual; D-01 cubierto por prueba de regla más verificación manual | Abierto |
+| R1 | El juego no se probó en Unity ni en una tablet: puede fallar algo que la lógica no ve (pausa en Difícil, pistas, escenas) | 4 | 4 | **16** | Ejecutar el smoke manual; D-01 cubierto por prueba de regla más verificación manual | Mitigado en parte: smoke manual ejecutado en el editor (25/10/2026); falta la tablet |
 | R2 | No hay pruebas con niños ni profesionales: se puede incumplir una adaptación TEA sin notarlo | 4 | 4 | **16** | Validar con las profesionales del equipo antes de declarar el módulo terminado | Abierto, fuera del TP |
 | R3 | La cola de sesiones no persiste: se pierden sesiones si la app se cierra antes de subir | 3 | 3 | **9** | Guardar la cola en disco (siguiente paso del módulo de subida) | Abierto |
 | R4 | Cobertura y mutación miden solo la lógica: los `MonoBehaviour` quedan sin medir | 4 | 3 | **12** | Mover lógica de Encajar a clases puras; mientras tanto, smoke manual | Abierto |
@@ -216,10 +217,10 @@ Probabilidad (P) e impacto (I) de 1 a 5; prioridad = P × I.
 | Puntaje de mutación | 91,79 % (492 de 536) | ≥ 85 % | Las pruebas detectan 9 de cada 10 defectos artificiales. Quedan 42 sin detectar, 22 en `SeguidorTrazo`. |
 | Duplicación | 3,28 % (11 clones) | ≤ 5 % | Aceptable. Cerca del límite; vigilar al agregar código. |
 | Hallazgos del análisis estático | 4 code smells, 0 bloqueantes | 0 bloqueantes | Deuda baja y estable. Los 4 son de estilo. |
-| Latencia p99 de una partida | 38 µs (GitHub) a 253 µs (local), el peor escenario | 5 ms | Muy por debajo; el umbral es flojo. |
-| Rendimiento sostenido (60 s) | 103 % del inicial | ≥ 60 % | No hay degradación. |
+| Latencia p99 de una partida | 57 µs (GitHub, run #15) a 253 µs (local), el peor escenario | 5 ms | Muy por debajo; el umbral es flojo. |
+| Rendimiento sostenido (60 s) | 102 % del inicial (GitHub) | ≥ 60 % | No hay degradación. |
 | Crecimiento de memoria (60 s) | ~0 MB | ≤ 20 MB | Sin fugas visibles en la lógica. |
-| Defectos registrados | 6 (2 del producto, 4 del proceso), 0 abiertos | 0 Altos abiertos | El proceso encuentra y corrige; hay más defectos del proceso que del producto. |
+| Defectos registrados | 7 (3 del producto, 4 del proceso), 1 abierto (D-07, severidad Media) | 0 Altos abiertos | El proceso encuentra y corrige; hay más defectos del proceso que del producto. D-07 lo halló el smoke manual. |
 
 **Métrica de proceso: dónde se detectan los defectos del pipeline.** De los 4 defectos del proceso, 2 se detectaron localmente antes del primer push (D-03, D-04) y 2 los detectó GitHub Actions al ejecutar (D-05, D-06). Interpretación: correr el pipeline en local ahorra ciclos, pero algunos problemas (versiones de SDK del runner) solo aparecen en el entorno real.
 
@@ -227,18 +228,18 @@ Probabilidad (P) e impacto (I) de 1 a 5; prioridad = P × I.
 
 **Mejora medida antes y después:** ver `quality/herramienta-nueva.md` sección 6.
 
-**Pendiente de medir:** tiempo total del pipeline en GitHub (completar con la captura de Actions). Referencia: el job de mutación tarda 83 s.
+**Tiempo del pipeline en GitHub:** 3 min 32 s (run #15, commit `af647f3`). El job de mutación corrió correctamente y reportó 91,8 %.
 
 ## 9. Objetivos de calidad medibles
 
 | Perspectiva | Objetivo | Cómo se mide | Meta | Estado |
 |---|---|---|---|---|
-| Usuario (niño con TEA) | La pausa congela el 100 % de temporizadores y movimientos | `ControlPausaTests` y smoke manual E7, M6, C5, L4, EM5 | 0 casos que avancen en pausa | Regla probada; verificación en juego pendiente |
-| Usuario | Ningún error del niño produce sonido ni mensaje negativo | Smoke manual M3, E3, C2, L3, EM2 | 5 de 5 | Pendiente |
+| Usuario (niño con TEA) | La pausa congela el 100 % de temporizadores y movimientos | `ControlPausaTests` y smoke manual E7, M6, C5, L4, EM5 | 0 casos que avancen en pausa | Regla probada y verificada en juego en los 5 juegos (smoke manual del 25/10/2026) |
+| Usuario | Ningún error del niño produce sonido ni mensaje negativo | Smoke manual M3, E3, C2, L3, EM2 | 5 de 5 | Cumplido en 5 de 5 juegos (smoke manual del 25/10/2026) |
 | Usuario / datos | Ninguna sesión se pierde por una falla de red | `ColaDeSesionesTests` | 0 sesiones perdidas con la app abierta | Cumplido; falla si la app se cierra (R3) |
 | Equipo | Cobertura y eficacia de las pruebas | Cobertura de líneas y puntaje de mutación | ≥ 80 % y ≥ 85 % | 99,2 % y 91,79 % |
-| Equipo | Feedback rápido del pipeline | Duración de la ejecución en Actions | ≤ 5 minutos | Por medir |
-| Organización (cátedra) | Todo defecto con registro completo y prueba de regresión | Registro de defectos | 100 % | 6 de 6 en el repositorio; carga en Jira pendiente |
+| Equipo | Feedback rápido del pipeline | Duración de la ejecución en Actions | ≤ 5 minutos | 3 min 32 s (Actions #15) |
+| Organización (cátedra) | Todo defecto con registro completo y prueba de regresión | Registro de defectos | 100 % | 6 de 7 con registro completo y corregido; D-07 abierto (7 de 7 cargados en Jira, TPC-1 a TPC-14) |
 
 **Prácticas de proceso que sostienen los objetivos:** pipeline en cada push, quality gate bloqueante, registro de defectos con trazabilidad, convención de lógica pura.
 
@@ -262,7 +263,7 @@ Contraste con la tabla de la consigna (la decisión del nivel es del grupo):
 | Pipeline: compilación, pruebas, análisis estático, cobertura, quality gate y reporte | Sí | Sí | **Cumplido** (7 etapas) |
 | Quality gate: bugs críticos, duplicación > 5 %, cobertura | Sí | Sí | **Cumplido** |
 | Plan de pruebas y riesgos | Sí | Sí | **Cumplido** (este documento) |
-| Defectos registrados en Jira u otra herramienta | Sí | Sí | **Parcial**: registro en el repositorio; carga en Jira pendiente |
+| Defectos registrados en Jira u otra herramienta | Sí | Sí | **Cumplido**: 7 de 7 defectos en Jira con sus 7 casos de prueba (TPC-1 a TPC-14) |
 | Herramienta nueva con proceso de cinco pasos | Sí | Sí | **Cumplido** (Stryker.NET) |
 | Cobertura mínima sobre el código existente | 50 % | 60 % | **Superado** (99,2 %) |
 | Smoke test | Definido y ejecutable a mano | Ejecutado por el pipeline | **Cumplido**: automático en el pipeline; manual definido |
@@ -273,11 +274,10 @@ Contraste con la tabla de la consigna (la decisión del nivel es del grupo):
 
 ## 12. Pendientes
 
-1. Ejecutar el smoke manual en Unity y registrar resultados y capturas.
-2. Cargar los defectos y los casos de prueba en Jira.
+1. Corregir D-07 (Memoria, paso M4: feedback al coincidir dos cartas) y repetir el smoke manual; el veredicto pasaría a aprobado.
+2. Probar el smoke manual en una tablet (se ejecutó en el editor de Unity).
 3. Persistir la cola de sesiones en disco (R3).
 4. Probar la integración contra un Supabase real (nivel 2).
 5. Ajustar los umbrales del stress con más ejecuciones (R9).
-6. Medir el tiempo total del pipeline en Actions.
-7. Mover la lógica de Encajar a clases puras (R4).
-8. Validar con las profesionales del equipo las adaptaciones TEA (R2).
+6. Mover la lógica de Encajar a clases puras (R4).
+7. Validar con las profesionales del equipo las adaptaciones TEA (R2).

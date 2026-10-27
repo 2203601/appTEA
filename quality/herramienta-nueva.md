@@ -76,7 +76,7 @@ Los puntajes son una primera valoración; el grupo tiene que revisarlos y ajusta
 |---|---|---|
 | 1. Local, solo medir | Instalada como herramienta local (`dotnet tool`), configuración en `quality/Juegos.Tests/stryker-config.json`. Se midió sin bloquear nada | Hecha |
 | 2. Mejorar con lo que muestra | Se escribieron 49 pruebas dirigidas a los mutantes que sobrevivían (`SeguidorTrazoLimitesTests`, `GeneradorHuecosLimitesTests`, `ContratoSubidaMensajesTests`) | Hecha |
-| 3. Pipeline con umbral | Job 6 del CI y fila en el quality gate con umbral de 85 % | Hecha en el repositorio; falta ver la primera ejecución en GitHub |
+| 3. Pipeline con umbral | Job 6 del CI y fila en el quality gate con umbral de 85 % | Hecha: corre en GitHub Actions (run #15: 91,8 %, 492 de 536 mutantes detectados) |
 | 4. Endurecer | Subir el umbral de a poco y, si el tiempo crece, mutar solo el código cambiado (`--since`) | Pendiente |
 
 ## 6. Mejora medida (antes y después)
