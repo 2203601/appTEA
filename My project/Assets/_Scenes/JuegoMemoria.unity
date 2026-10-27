@@ -1480,7 +1480,7 @@ MonoBehaviour:
   prefabCard: {fileID: 6009400902384373059, guid: 54e4af2c6b71f445cb458bdf1624e03c, type: 3}
   allCards:
   - {fileID: 0}
-  segundosParaPista: 10
+  segundosParaPista: 180
   personaje: {fileID: 2129084143}
   panelFin: {fileID: 644623692}
 --- !u!4 &975852019

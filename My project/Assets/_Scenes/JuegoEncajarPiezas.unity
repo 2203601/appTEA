@@ -926,7 +926,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 44
+    m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -2968,7 +2968,7 @@ MonoBehaviour:
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 64
+    m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -3489,7 +3489,7 @@ MonoBehaviour:
   rondaText: {fileID: 0}
   totalRondas: 4
   delayEntreRondas: 1.2
-  segundosParaPista: 5
+  segundosParaPista: 20
   frasesCorrecto:
   - Correcto ! Muy bien!
   - "Excelente! Sigue as\xED!"
