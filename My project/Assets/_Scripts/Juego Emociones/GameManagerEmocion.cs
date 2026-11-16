@@ -84,12 +84,14 @@ public class GameManagerEmocion : MonoBehaviour
     EmocionInfo emocionActual;
     List<OpcionEmocion> opcionesActuales = new List<OpcionEmocion>();
     int rondaActual;
-    int intentosFallidos;
+    RondaDeOpciones ronda = new RondaDeOpciones(2);   // reglas de la ronda (lógica pura, con pruebas unitarias)
+    readonly System.Random azar = new System.Random();
     bool esperandoSiguienteRonda;
 
 
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
  
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
 
@@ -145,7 +147,7 @@ public class GameManagerEmocion : MonoBehaviour
         if (rondaText != null) rondaText.text = $"Ronda {rondaActual}/{totalRondas}";
  
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
  
         // 0) Limpiar las opciones de la ronda anterior
@@ -159,17 +161,8 @@ public class GameManagerEmocion : MonoBehaviour
         emocionActual = todasLasEmociones[UnityEngine.Random.Range(0, todasLasEmociones.Count)];
         tarjetaObjetivo.SetCard(emocionActual);
  
-        // 2) Armar el pool de opciones
-        List<EmocionInfo> pool = new List<EmocionInfo>(todasLasEmociones);
-        pool.Remove(emocionActual);
-        Barajar(pool);
- 
-        List<EmocionInfo> seleccionadas = new List<EmocionInfo> { emocionActual };
-        for (int i = 0; i < opcionesObjetivo - 1 && i < pool.Count; i++)
-        {
-            seleccionadas.Add(pool[i]);
-        }
-        Barajar(seleccionadas);
+        // 2) La correcta más distractores, mezclados
+        List<EmocionInfo> seleccionadas = RondaDeOpciones.ElegirOpciones(todasLasEmociones, emocionActual, opcionesObjetivo, azar);
  
        
         foreach (var info in seleccionadas)
@@ -192,7 +185,7 @@ public class GameManagerEmocion : MonoBehaviour
         if (rondaText != null) rondaText.text = $"Ronda {rondaActual}/{totalRondas}";
 
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
 
         // 0) Limpiar los emojis de la ronda anterior
@@ -215,17 +208,8 @@ public class GameManagerEmocion : MonoBehaviour
             return;
         }
 
-        // 2) Armar el pool de emojis: el correcto + distractores sin repetir
-        List<EmocionInfo> pool = new List<EmocionInfo>(todasLasEmociones);
-        pool.Remove(emocionCorrectaActual);
-        Barajar(pool);
-
-        List<EmocionInfo> seleccionadas = new List<EmocionInfo> { emocionCorrectaActual };
-        for (int i = 0; i < opcionesObjetivo - 1 && i < pool.Count; i++)
-        {
-            seleccionadas.Add(pool[i]);
-        }
-        Barajar(seleccionadas);
+        // 2) La correcta más distractores, mezclados
+        List<EmocionInfo> seleccionadas = RondaDeOpciones.ElegirOpciones(todasLasEmociones, emocionCorrectaActual, opcionesObjetivo, azar);
 
         // 3) Instanciar un emoji arrastrable por opción
         foreach (var info in seleccionadas)
@@ -241,9 +225,11 @@ public class GameManagerEmocion : MonoBehaviour
         if (esperandoSiguienteRonda) return;
 
         bool esCorrecta = nombreSeleccionado == emocionActual.emocionNombre;
+        ResultadoRespuesta resultado = ronda.Responder(esCorrecta);
 
         if (esCorrecta)
         {
+            PistaBrillo.Desactivar(opcionElegida.gameObject);
             opcionElegida.MarcarComoCorrecta();
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
 
@@ -255,23 +241,20 @@ public class GameManagerEmocion : MonoBehaviour
         // Respuesta incorrecta
         opcionElegida.MarcarComoIncorrecta();
         opcionElegida.GetComponent<Button>().interactable = false; // esa opción ya no se puede volver a elegir
-        intentosFallidos++;
-
-        if (intentosFallidos < 2)
+        if (resultado == ResultadoRespuesta.Fallo)
         {
             // Primer error: puede volver a intentar con las opciones que quedan
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
             return;
         }
 
-        // Segundo error: se revela cuál era la correcta y se cierra la ronda
-        if (feedbackText != null) feedbackText.text = string.Format(FraseAlAzar(frasesRevelar), emocionActual.emocionNombre);
+        // Desde el segundo error la correcta se destaca con un borde suave; el chico la tiene que tocar
+        if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
         foreach (var opcion in opcionesActuales)
         {
             if (opcion.label.text == emocionActual.emocionNombre)
-                opcion.MarcarComoCorrecta();
+                PistaBrillo.Activar(opcion.gameObject);
         }
-        TerminarRonda();
     }
  
     public void ResponderSituacion(EmojiArrastrable emojiSoltado)
@@ -286,9 +269,11 @@ public class GameManagerEmocion : MonoBehaviour
         }
 
         bool esCorrecta = emojiSoltado.EmocionNombre == situacionActual.emocionCorrecta;
+        ResultadoRespuesta resultado = ronda.Responder(esCorrecta);
 
         if (esCorrecta)
         {
+            PistaBrillo.Desactivar(emojiSoltado.gameObject);
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
             emojiSoltado.transform.SetParent(situacionImage.transform, true);
             if (personaje != null) personaje.SetTrigger(SonreirTrigger);
@@ -299,19 +284,20 @@ public class GameManagerEmocion : MonoBehaviour
 
         // Respuesta incorrecta: el emoji vuelve a la bandeja
         emojiSoltado.VolverAPosicionOriginal();
-        intentosFallidos++;
-
-        if (intentosFallidos < 2)
+        if (resultado == ResultadoRespuesta.Fallo)
         {
             // Primer error: puede volver a intentar con los emojis que quedan
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
             return;
         }
 
-        // Segundo error: se revela cuál era la correcta y se cierra la ronda
-        if (feedbackText != null)
-            feedbackText.text = string.Format(FraseAlAzar(frasesRevelar), situacionActual.emocionCorrecta);
-        TerminarRonda();
+        // Desde el segundo error el emoji correcto se destaca con un borde suave; el chico lo tiene que arrastrar
+        if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
+        foreach (var emoji in emojisActuales)
+        {
+            if (emoji.EmocionNombre == situacionActual.emocionCorrecta)
+                PistaBrillo.Activar(emoji.gameObject);
+        }
     }
     void TerminarRonda()
     {
@@ -359,6 +345,7 @@ public class GameManagerEmocion : MonoBehaviour
         
     
         if (feedbackText != null) feedbackText.text = "";
+        if (panelFin != null) panelFin.Mostrar();
  
     }
     string FraseAlAzar(string[] frases)
@@ -366,15 +353,6 @@ public class GameManagerEmocion : MonoBehaviour
         if (frases == null || frases.Length == 0) return "";
         return frases[UnityEngine.Random.Range(0, frases.Length)];
     }
-    void Barajar(List<EmocionInfo> lista)
-    {
-        for (int i = lista.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-            (lista[i], lista[j]) = (lista[j], lista[i]);
-        }
-    }
- 
 }
  
 

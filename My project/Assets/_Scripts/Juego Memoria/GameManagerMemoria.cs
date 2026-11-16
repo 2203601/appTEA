@@ -32,17 +32,26 @@ public class MemoriaGameManager : MonoBehaviour
     public Card prefabCard;
     public CardInfo[] allCards;
  
-    List<CardInfo> ordererCardList;
     List<CardInfo> randomCardList;
     List<Card> selectedCards;
  
-    int totalCouples;
-    int currentCouples = 0;
+    [Header("Pista")]
+    [Tooltip("Segundos sin acertar un par antes de que empiece a brillar la carta que corresponde dar vuelta")]
+    public float segundosParaPista = 180f;
+
+    TemporizadorInactividad temporizadorPista;
+    List<Card> todasLasCartas = new List<Card>();
+    bool pistaActiva;
+    Card cartaConPista;
+
+    TableroMemoria tablero;   // reglas del juego (lógica pura, con pruebas unitarias)
+    readonly System.Random azar = new System.Random();
     int paresObjetivo;
  
  
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
  
     // nombre del parámetro Trigger que armaste en el Animator Controller
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
@@ -50,9 +59,9 @@ public class MemoriaGameManager : MonoBehaviour
  
     private void Awake()
     {
-        ordererCardList = new List<CardInfo>();
         randomCardList = new List<CardInfo>();
         selectedCards = new List<Card>();
+        temporizadorPista = new TemporizadorInactividad(segundosParaPista);
  
         allCards = Resources.LoadAll<CardInfo>("Cartas");
  
@@ -87,42 +96,21 @@ public class MemoriaGameManager : MonoBehaviour
             }
         }
  
-        // barajamos esas cartas (Fisher-Yates)
-        for (int i = disponibles.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-            CardInfo temp = disponibles[i];
-            disponibles[i] = disponibles[j];
-            disponibles[j] = temp;
-        }
- 
-        // nos quedamos con tantos pares como pida la dificultad (o menos, si no hay suficientes cartas de esa temática)
-        totalCouples = Mathf.Min(paresObjetivo, disponibles.Count);
- 
-        for (int i = 0; i < totalCouples; i++)
-        {
-            ordererCardList.Add(disponibles[i]);
-            ordererCardList.Add(disponibles[i]);
-        }
- 
+        // tantos pares como pida la dificultad (o menos, si no hay suficientes cartas de esa temática), duplicados y mezclados
+        randomCardList = TableroMemoria.ArmarMazo(disponibles, paresObjetivo, azar);
+
+        List<string> nombres = new List<string>();
+        foreach (CardInfo card in randomCardList) nombres.Add(card.cardName);
+        tablero = new TableroMemoria(nombres);
+
         DisplayCouple();
- 
-        while (ordererCardList.Count > 0) // 20
-        {
-            int randomIndex;
-            CardInfo selectedCardInfo;
- 
-            randomIndex = UnityEngine.Random.Range(0, ordererCardList.Count); // 0 a 20
-            selectedCardInfo = ordererCardList[randomIndex];
- 
-            randomCardList.Add(selectedCardInfo);
-            ordererCardList.Remove(selectedCardInfo); // -1 el count, para terminar el while
-        }
+
         foreach (CardInfo card in randomCardList)
         {
             Card instance;
             instance = Instantiate(prefabCard, contentDeckTransform);
             instance.SetCard(card);
+            todasLasCartas.Add(instance);
  
             // asignamos el metodo a la accion
             instance.OnSelect = AddCards;
@@ -132,39 +120,44 @@ public class MemoriaGameManager : MonoBehaviour
     void AddCards(Card selectCard)
     {
         selectedCards.Add(selectCard);
-        if (Card.FLIPPED_CARD >= 2)
+        ResultadoSeleccion resultado = tablero.Seleccionar(todasLasCartas.IndexOf(selectCard));
+
+        if (resultado == ResultadoSeleccion.Par)
         {
-            CompareSelectedCard();
+            ResolverPar();
+            return;
         }
-    }
- 
-    void CompareSelectedCard()
-    {
-        if (selectedCards[0].GetCardName() == selectedCards[1].GetCardName())
-        {
-            currentCouples++;
-            DisplayCouple();
-            selectedCards.Clear();
-            Card.FLIPPED_CARD = 0;
- 
-            // Dispara la animación de sonreír. El Animator Controller se encarga
-            // de volver solo a Idle cuando el clip termina (transición con Exit Time).
-            if (personaje != null) personaje.SetTrigger(SonreirTrigger);
- 
-            if (currentCouples >= totalCouples)
-            {
-                Win();
-            }
-        }
-        else
+
+        if (resultado == ResultadoSeleccion.NoPar)
         {
             Invoke("TurnWrongCard", 1.5f);
         }
- 
+
+        if (pistaActiva) ActualizarPista();
     }
+
+    void ResolverPar()
+    {
+        DisplayCouple();
+        temporizadorPista.Reiniciar();
+        pistaActiva = false;
+        QuitarPista();
+        selectedCards.Clear();
+        Card.FLIPPED_CARD = 0;
+
+        // Dispara la animación de sonreír. El Animator Controller se encarga
+        // de volver solo a Idle cuando el clip termina (transición con Exit Time).
+        if (personaje != null) personaje.SetTrigger(SonreirTrigger);
+
+        if (tablero.Terminado)
+        {
+            Win();
+        }
+    }
+
     void DisplayCouple()
     {
-        couplesTextComponent.text = currentCouples.ToString("00") + " / " + totalCouples.ToString("00");
+        couplesTextComponent.text = tablero.Encontrados.ToString("00") + " / " + tablero.Pares.ToString("00");
     }
  
     void TurnWrongCard()
@@ -175,7 +168,44 @@ public class MemoriaGameManager : MonoBehaviour
         }
  
         selectedCards.Clear();
+        tablero.TaparSeleccion();
         Card.FLIPPED_CARD = 0;
+
+        if (pistaActiva) ActualizarPista();
+    }
+ 
+    void Update()
+    {
+        if (Card.GAME_OVER || tablero == null || tablero.Terminado) return;
+
+        // Sin límite de tiempo: esto solo enciende una pista suave. En pausa (timeScale = 0) no avanza.
+        if (temporizadorPista.Avanzar(Time.deltaTime))
+        {
+            pistaActiva = true;
+            ActualizarPista();
+        }
+    }
+
+    // La carta que "toca dar vuelta" (ver TableroMemoria.PosicionParaPista)
+    void ActualizarPista()
+    {
+        int posicion = tablero.PosicionParaPista();
+        Card objetivo = posicion >= 0 ? todasLasCartas[posicion] : null;
+
+        if (objetivo == cartaConPista) return;
+
+        QuitarPista();
+        if (objetivo != null)
+        {
+            PistaBrillo.Activar(objetivo.gameObject);
+            cartaConPista = objetivo;
+        }
+    }
+
+    void QuitarPista()
+    {
+        if (cartaConPista != null) PistaBrillo.Desactivar(cartaConPista.gameObject);
+        cartaConPista = null;
     }
  
     void Lose()
@@ -185,6 +215,7 @@ public class MemoriaGameManager : MonoBehaviour
  
     void Win()
     {
+        if (panelFin != null) panelFin.Mostrar();
     }
     // Update is called once per frame
     public void BackToMenu()

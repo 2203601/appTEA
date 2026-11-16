@@ -22,6 +22,7 @@ public class GameManagerCompletar : MonoBehaviour
     public Text feedbackText;
     public Text rondaText;
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
 
     [Header("Config")]
     public int totalRondas = 5;
@@ -88,17 +89,17 @@ public class GameManagerCompletar : MonoBehaviour
             case Difficulty.Medio:
                 foreach (var p in banco.palabrasConImagen)
                     ejercicios.Add(new EjercicioCompletar(p.palabra, p.imagen, false));
-                huecosPorEjercicio = 2; opcionesPorHueco = 4;
+                huecosPorEjercicio = 2; opcionesPorHueco = 3;
                 break;
             case Difficulty.Dificil:
                 foreach (var p in banco.palabrasLargas)
                     ejercicios.Add(new EjercicioCompletar(p, null, false));
-                huecosPorEjercicio = 3; opcionesPorHueco = 5;
+                huecosPorEjercicio = 3; opcionesPorHueco = 4;
                 break;
             default:
                 foreach (var s in banco.secuenciasNumeros)
                     ejercicios.Add(new EjercicioCompletar(s, null, true));
-                huecosPorEjercicio = 1; opcionesPorHueco = 3;
+                huecosPorEjercicio = 1; opcionesPorHueco = 2;
                 break;
         }
     }
@@ -294,6 +295,7 @@ public class GameManagerCompletar : MonoBehaviour
         if (rondaText != null) rondaText.text = "";
         if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesFin);
         if (personaje != null) personaje.SetTrigger(SonreirTrigger);
+        if (panelFin != null) panelFin.Mostrar();
     }
 
     string FraseAlAzar(string[] frases)

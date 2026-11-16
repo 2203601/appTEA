@@ -37,6 +37,13 @@ public class GameManagerEncajar : MonoBehaviour
     public float delayEntreRondas = 1.2f;
     int opcionesObjetivo;
 
+    [Header("Pista")]
+    [Tooltip("Segundos sin que el chico toque la pantalla antes de que una pieza empiece a brillar")]
+    public float segundosParaPista = 20f;
+
+    TemporizadorInactividad inactividad;
+    GameObject piezaConPista;
+
     private static readonly Dictionary<Difficulty, int> opcionesPorDificultad = new Dictionary<Difficulty, int>
     {
         { Difficulty.Facil, 3 },
@@ -82,11 +89,13 @@ public class GameManagerEncajar : MonoBehaviour
     List<PiezaArrastrable> piezasActuales = new List<PiezaArrastrable>();
 
     int rondaActual;
-    int intentosFallidos;
+    RondaDeOpciones ronda = new RondaDeOpciones(2);   // reglas de la ronda (lógica pura, con pruebas unitarias)
+    readonly System.Random azar = new System.Random();
     bool esperandoSiguienteRonda;
 
     // animación del personaje
     public Animator personaje;
+    public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
 
     // nombre del parámetro Trigger que armaste en el Animator Controller
     static readonly int SonreirTrigger = Animator.StringToHash("Sonreir");
@@ -95,6 +104,7 @@ public class GameManagerEncajar : MonoBehaviour
     void Awake()
     {
         Instancia = this;
+        inactividad = new TemporizadorInactividad(segundosParaPista);
 
         opcionesObjetivo = opcionesPorDificultad.TryGetValue(GameSession.SelectedDifficulty, out int opciones)
             ? opciones
@@ -151,8 +161,10 @@ public class GameManagerEncajar : MonoBehaviour
         if (rondaText != null) rondaText.text = $"Ronda {rondaActual}/{totalRondas}";
 
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
+        QuitarPista();
+        inactividad.Reiniciar();
 
         // 0) Limpiar los emojis de la ronda anterior
         foreach (var pieza in piezasActuales)
@@ -173,18 +185,8 @@ public class GameManagerEncajar : MonoBehaviour
             return;
         }
 
-        // 2) Armar el pool de emojis: el correcto + distractores sin repetir
-        List<PiezaInfo> pool = new List<PiezaInfo>(todasLasPiezasAEncajar);
-        pool.Remove(piezaCorrecta);
-        Barajar(pool);
-
-
-        List<PiezaInfo> seleccionadas = new List<PiezaInfo> { piezaCorrecta };
-        for (int i = 0; i < opcionesObjetivo - 1 && i < pool.Count; i++)
-        {
-            seleccionadas.Add(pool[i]);
-        }
-        Barajar(seleccionadas);
+        // 2) La correcta más distractores, mezclados
+        List<PiezaInfo> seleccionadas = RondaDeOpciones.ElegirOpciones(todasLasPiezasAEncajar, piezaCorrecta, opcionesObjetivo, azar);
 
         // 3) Instanciar un emoji arrastrable por opción
         foreach (var info in seleccionadas)
@@ -202,11 +204,13 @@ public class GameManagerEncajar : MonoBehaviour
         if (rondaText != null) rondaText.text = "";
 
         esperandoSiguienteRonda = false;
-        intentosFallidos = 0;
+        ronda = new RondaDeOpciones(2);
         if (feedbackText != null) feedbackText.text = "";
 
         piezasColocadasCorrectas = 0;
         piezaAgarrada = null;
+        QuitarPista();
+        inactividad.Reiniciar();
         PiezaRompecabezas.ReiniciarOrden();
 
         // Las piezas ya están armadas en la escena, dentro del panel difícil
@@ -255,6 +259,7 @@ public class GameManagerEncajar : MonoBehaviour
         }
 
         bool esCorrecta = piezaSoltada.PiezaNombre == piezaActual.piezaNombre;
+        ResultadoRespuesta resultado = ronda.Responder(esCorrecta);
 
         if (esCorrecta)
         {
@@ -268,9 +273,7 @@ public class GameManagerEncajar : MonoBehaviour
 
         // Respuesta incorrecta: el emoji vuelve a la bandeja
         piezaSoltada.VolverAPosicionOriginal();
-        intentosFallidos++;
-
-        if (intentosFallidos < 2)
+        if (resultado == ResultadoRespuesta.Fallo)
         {
             // Primer error: puede volver a intentar con los emojis que quedan
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
@@ -286,6 +289,11 @@ public class GameManagerEncajar : MonoBehaviour
 
     void Update()
     {
+        // En pausa (timeScale = 0) no avanza nada: ni la pista ni el arrastre del rompecabezas
+        if (ControlPausa.EnPausa(Time.timeScale)) return;
+
+        ActualizarPista();
+
         if (piezasRompecabezas == null || esperandoSiguienteRonda) return;
 
         Pointer puntero = Pointer.current;
@@ -332,9 +340,68 @@ public class GameManagerEncajar : MonoBehaviour
         }
     }
 
+    // Pista suave: tras segundosParaPista sin tocar la pantalla, brilla la pieza que corresponde.
+    // Cualquier toque la apaga y vuelve a empezar la cuenta.
+    void ActualizarPista()
+    {
+        Pointer puntero = Pointer.current;
+        if (puntero != null && puntero.press.wasPressedThisFrame)
+        {
+            QuitarPista();
+            inactividad.Reiniciar();
+        }
+
+        if (esperandoSiguienteRonda) return;
+
+        if (inactividad.Avanzar(Time.deltaTime)) MostrarPista();
+    }
+
+    void MostrarPista()
+    {
+        GameObject objetivo = null;
+
+        if (GameSession.SelectedDifficulty == Difficulty.Dificil)
+        {
+            // La pieza suelta que está más arriba (la que se ve completa)
+            PiezaRompecabezas mejor = null;
+            if (piezasRompecabezas != null)
+            {
+                foreach (var pieza in piezasRompecabezas)
+                {
+                    if (pieza.Colocada) continue;
+                    if (mejor == null || pieza.Orden > mejor.Orden) mejor = pieza;
+                }
+            }
+            if (mejor != null) objetivo = mejor.gameObject;
+        }
+        else if (piezaActual != null)
+        {
+            // La opción que encaja en la silueta de esta ronda
+            foreach (var pieza in piezasActuales)
+            {
+                if (pieza != null && pieza.PiezaNombre == piezaActual.piezaNombre)
+                {
+                    objetivo = pieza.gameObject;
+                    break;
+                }
+            }
+        }
+
+        if (objetivo == null) return;
+        PistaBrillo.Activar(objetivo);
+        piezaConPista = objetivo;
+    }
+
+    void QuitarPista()
+    {
+        if (piezaConPista != null) PistaBrillo.Desactivar(piezaConPista);
+        piezaConPista = null;
+    }
+
     void TerminarRonda()
     {
         esperandoSiguienteRonda = true;
+        QuitarPista();
 
 
         foreach (var pieza in piezasActuales)
@@ -355,6 +422,7 @@ public class GameManagerEncajar : MonoBehaviour
         piezasActuales.Clear();
 
         if (feedbackText != null) feedbackText.text = "";
+        if (panelFin != null) panelFin.Mostrar();
 
     }
     string FraseAlAzar(string[] frases)
@@ -362,15 +430,6 @@ public class GameManagerEncajar : MonoBehaviour
         if (frases == null || frases.Length == 0) return "";
         return frases[UnityEngine.Random.Range(0, frases.Length)];
     }
-    void Barajar(List<PiezaInfo> lista)
-    {
-        for (int i = lista.Count - 1; i > 0; i--)
-        {
-            int j = UnityEngine.Random.Range(0, i + 1);
-            (lista[i], lista[j]) = (lista[j], lista[i]);
-        }
-    }
-    
     void Barajar(List<int> lista)
     {
         for (int i = lista.Count - 1; i > 0; i--)
