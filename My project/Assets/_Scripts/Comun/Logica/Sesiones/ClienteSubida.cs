@@ -21,9 +21,13 @@ public class ClienteSubida
     public ResultadoSubida Subir(Guid perfilId, SesionDeJuego sesion, string token)
     {
         if (ContratoSubida.Validar(perfilId, sesion).Count > 0) return ResultadoSubida.Invalida;
-        if (string.IsNullOrEmpty(token)) return ResultadoSubida.NoAutorizado;
+        return SubirPayload(ContratoSubida.ConstruirPayload(perfilId, sesion), token);
+    }
 
-        string json = ContratoSubida.ConstruirPayload(perfilId, sesion);
+    // Reenvía un JSON ya armado (el que quedó guardado en la cola local)
+    public ResultadoSubida SubirPayload(string json, string token)
+    {
+        if (string.IsNullOrEmpty(token)) return ResultadoSubida.NoAutorizado;
         try
         {
             return Clasificar(transporte.Enviar(ContratoSubida.Ruta, json, token).Codigo);
