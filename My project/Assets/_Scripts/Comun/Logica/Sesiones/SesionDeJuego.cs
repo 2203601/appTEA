@@ -22,7 +22,6 @@ public class MetricasSesion
     public Guid Id { get; set; }
     public int? Aciertos { get; set; }              // null en juegos sin aciertos (Línea)
     public int? Errores { get; set; }
-    public double? TiempoRespuestaMedioMs { get; set; }
     public int PistasUsadas { get; set; }
     public DateTime? RegistradaEn { get; set; }
 }
