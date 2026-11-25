@@ -43,7 +43,6 @@ public class GameManagerEncajar : MonoBehaviour
 
     TemporizadorInactividad inactividad;
     GameObject piezaConPista;
-    bool pistaPorFallos;   // la pista salió de los errores: no se apaga al tocar la pantalla, sino al acertar
 
     private static readonly Dictionary<Difficulty, int> opcionesPorDificultad = new Dictionary<Difficulty, int>
     {
@@ -281,11 +280,10 @@ public class GameManagerEncajar : MonoBehaviour
             return;
         }
 
-        // Desde el segundo error la pieza correcta se destaca con un borde suave y la ronda sigue abierta:
-        // el chico la tiene que arrastrar él (no se revela la respuesta ni se cierra la ronda)
-        if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesReintentar);
-        pistaPorFallos = true;
-        MostrarPista();
+        // Segundo error: se revela cuál era la correcta y se cierra la ronda
+        if (feedbackText != null)
+            feedbackText.text = string.Format(FraseAlAzar(frasesRevelar), piezaActual.piezaNombre);
+        TerminarRonda();
     }
 
 
@@ -349,8 +347,7 @@ public class GameManagerEncajar : MonoBehaviour
         Pointer puntero = Pointer.current;
         if (puntero != null && puntero.press.wasPressedThisFrame)
         {
-            // La pista por errores queda hasta que acierte; la de inactividad se apaga con cualquier toque
-            if (!pistaPorFallos) QuitarPista();
+            QuitarPista();
             inactividad.Reiniciar();
         }
 
@@ -399,7 +396,6 @@ public class GameManagerEncajar : MonoBehaviour
     {
         if (piezaConPista != null) PistaBrillo.Desactivar(piezaConPista);
         piezaConPista = null;
-        pistaPorFallos = false;
     }
 
     void TerminarRonda()

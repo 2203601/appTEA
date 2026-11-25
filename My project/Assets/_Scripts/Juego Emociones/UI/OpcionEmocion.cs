@@ -42,8 +42,7 @@ public class OpcionEmocion : MonoBehaviour
  
     public void MarcarComoIncorrecta()
     {
-        // Sin rojo: la opción equivocada solo se apaga (como en Completar), sin señal negativa
-        boton.image.color = new Color(1f, 1f, 1f, 0.35f);
+        boton.image.color = Color.red;
     }
 
 

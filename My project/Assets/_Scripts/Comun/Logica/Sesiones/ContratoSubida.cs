@@ -33,6 +33,8 @@ public static class ContratoSubida
         {
             if (m.Id == Guid.Empty) errores.Add("metrics.id vacío");
             if (m.Aciertos < 0 || m.Errores < 0 || m.PistasUsadas < 0) errores.Add("metrics con contadores negativos");
+            if (m.TiempoRespuestaMedioMs.HasValue && !EsNumeroValido(m.TiempoRespuestaMedioMs.Value))
+                errores.Add("avg_response_ms no es un número válido");
         }
 
         var claves = new HashSet<string>();
@@ -70,6 +72,7 @@ public static class ContratoSubida
             j.Append("\"id\":").Append(Texto(m.Id.ToString()));
             j.Append(",\"correct_answers\":").Append(Entero(m.Aciertos));
             j.Append(",\"wrong_answers\":").Append(Entero(m.Errores));
+            j.Append(",\"avg_response_ms\":").Append(m.TiempoRespuestaMedioMs.HasValue ? Numero(m.TiempoRespuestaMedioMs.Value) : "null");
             j.Append(",\"hints_used\":").Append(m.PistasUsadas.ToString(CultureInfo.InvariantCulture));
             if (m.RegistradaEn.HasValue) j.Append(",\"recorded_at\":").Append(Fecha(m.RegistradaEn.Value));
             j.Append('}');
