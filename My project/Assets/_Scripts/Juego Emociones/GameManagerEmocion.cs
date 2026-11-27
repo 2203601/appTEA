@@ -88,6 +88,15 @@ public class GameManagerEmocion : MonoBehaviour
     readonly System.Random azar = new System.Random();
     bool esperandoSiguienteRonda;
 
+    // mazos mezclados: no se repite nada hasta haber usado todo
+    readonly List<EmocionInfo> mazoEmociones = new List<EmocionInfo>();
+    readonly List<SituacionInfo> mazoSituaciones = new List<SituacionInfo>();
+
+    // métricas de esta partida (un ítem = una ronda)
+    SeguimientoDePartida partida;
+    int items;
+    int itemsPrimerIntento;
+
 
     // animación del personaje
     public Animator personaje;
@@ -118,6 +127,11 @@ public class GameManagerEmocion : MonoBehaviour
     {
         ConfigurarVista();
         rondaActual = 0;
+
+        partida = SeguimientoDePartida.Iniciar(gameObject, IdsDeJuegos.Emociones, GameSession.SelectedDifficulty);
+        partida.Registro.FijarDetalle("items", 0);
+        partida.Registro.FijarDetalle("items_primer_intento", 0);
+
         NuevaRonda();
     }
 
@@ -158,7 +172,7 @@ public class GameManagerEmocion : MonoBehaviour
         opcionesActuales.Clear();
  
         // 1) Elegir la emoción correcta
-        emocionActual = todasLasEmociones[UnityEngine.Random.Range(0, todasLasEmociones.Count)];
+        emocionActual = SacarDelMazo(mazoEmociones, todasLasEmociones);
         tarjetaObjetivo.SetCard(emocionActual);
  
         // 2) La correcta más distractores, mezclados
@@ -196,7 +210,7 @@ public class GameManagerEmocion : MonoBehaviour
         emojisActuales.Clear();
 
         // 1) Elegir la situación y su emoción correcta
-        situacionActual = todasLasSituaciones[Random.Range(0, todasLasSituaciones.Count)];
+        situacionActual = SacarDelMazo(mazoSituaciones, todasLasSituaciones);
         situacionImage.sprite = situacionActual.situacionSprite;
         if (situacionTexto != null) situacionTexto.text = situacionActual.descripcion;
 
@@ -234,11 +248,13 @@ public class GameManagerEmocion : MonoBehaviour
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
 
             if (personaje != null) personaje.SetTrigger(SonreirTrigger);
+            RegistrarRondaResuelta();
             TerminarRonda();
             return;
         }
 
         // Respuesta incorrecta
+        RegistrarFallo(emocionActual.emocionNombre, nombreSeleccionado);
         opcionElegida.MarcarComoIncorrecta();
         opcionElegida.GetComponent<Button>().interactable = false; // esa opción ya no se puede volver a elegir
         if (resultado == ResultadoRespuesta.Fallo)
@@ -278,11 +294,13 @@ public class GameManagerEmocion : MonoBehaviour
             emojiSoltado.transform.SetParent(situacionImage.transform, true);
             if (personaje != null) personaje.SetTrigger(SonreirTrigger);
 
+            RegistrarRondaResuelta();
             TerminarRonda();
             return;
         }
 
         // Respuesta incorrecta: el emoji vuelve a la bandeja
+        RegistrarFallo(situacionActual.emocionCorrecta, emojiSoltado.EmocionNombre);
         emojiSoltado.VolverAPosicionOriginal();
         if (resultado == ResultadoRespuesta.Fallo)
         {
@@ -299,6 +317,27 @@ public class GameManagerEmocion : MonoBehaviour
                 PistaBrillo.Activar(emoji.gameObject);
         }
     }
+    void RegistrarRondaResuelta()
+    {
+        items++;
+        if (ronda.Fallos == 0) itemsPrimerIntento++;
+
+        partida.Registro.RegistrarAcierto();
+        partida.Registro.FijarDetalle("items", items);
+        partida.Registro.FijarDetalle("items_primer_intento", itemsPrimerIntento);
+        partida.Registro.FijarDetalle("porcentaje_correctas", System.Math.Round(100.0 * itemsPrimerIntento / items, 1));
+    }
+
+    // Cada error suma también la confusión: "confusion:<la correcta>><la elegida>"
+    void RegistrarFallo(string correcta, string elegida)
+    {
+        partida.Registro.RegistrarError();
+        partida.Registro.SumarDetalle($"confusion:{correcta.ToLowerInvariant()}>{elegida.ToLowerInvariant()}", 1);
+
+        // La pista se cuenta una sola vez por ronda, cuando aparece
+        if (ronda.Fallos == ronda.FallosParaPista) partida.Registro.RegistrarPista();
+    }
+
     void TerminarRonda()
     {
         esperandoSiguienteRonda = true;
@@ -325,6 +364,7 @@ public class GameManagerEmocion : MonoBehaviour
  
     void TerminarJuego()
     {
+        partida.Terminar(true);
         if (GameSession.SelectedDifficulty == Difficulty.Dificil)
         {
             foreach (var emoji in emojisActuales)
@@ -347,6 +387,23 @@ public class GameManagerEmocion : MonoBehaviour
         if (feedbackText != null) feedbackText.text = "";
         if (panelFin != null) panelFin.Mostrar();
  
+    }
+    // Saca la próxima carta del mazo; cuando se vacía, lo vuelve a armar y mezclar
+    T SacarDelMazo<T>(List<T> mazo, List<T> todas)
+    {
+        if (mazo.Count == 0)
+        {
+            mazo.AddRange(todas);
+            for (int i = mazo.Count - 1; i > 0; i--)
+            {
+                int j = azar.Next(0, i + 1);
+                (mazo[i], mazo[j]) = (mazo[j], mazo[i]);
+            }
+        }
+
+        T elegida = mazo[mazo.Count - 1];
+        mazo.RemoveAt(mazo.Count - 1);
+        return elegida;
     }
     string FraseAlAzar(string[] frases)
     {
