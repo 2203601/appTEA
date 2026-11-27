@@ -47,6 +47,8 @@ public class MemoriaGameManager : MonoBehaviour
     TableroMemoria tablero;   // reglas del juego (lógica pura, con pruebas unitarias)
     readonly System.Random azar = new System.Random();
     int paresObjetivo;
+
+    SeguimientoDePartida partida;   // métricas de esta partida
  
  
     // animación del personaje
@@ -61,6 +63,7 @@ public class MemoriaGameManager : MonoBehaviour
     {
         randomCardList = new List<CardInfo>();
         selectedCards = new List<Card>();
+        Card.FLIPPED_CARD = 0;   // es estático: si se salió con cartas dadas vuelta, quedaba el valor viejo
         temporizadorPista = new TemporizadorInactividad(segundosParaPista);
  
         allCards = Resources.LoadAll<CardInfo>("Cartas");
@@ -81,7 +84,9 @@ public class MemoriaGameManager : MonoBehaviour
         // cambiamos el color
         fondoSpriteRenderer.color = SELECTED_COLOR;
         CreateGrid();
- 
+
+        partida = SeguimientoDePartida.Iniciar(gameObject, IdsDeJuegos.Memoria, GameSession.SelectedDifficulty);
+        partida.Registro.FijarDetalle("intentos", 0);
     }
  
  
@@ -124,12 +129,16 @@ public class MemoriaGameManager : MonoBehaviour
 
         if (resultado == ResultadoSeleccion.Par)
         {
+            partida.Registro.RegistrarAcierto();
+            partida.Registro.SumarDetalle("intentos", 1);
             ResolverPar();
             return;
         }
 
         if (resultado == ResultadoSeleccion.NoPar)
         {
+            partida.Registro.RegistrarError();
+            partida.Registro.SumarDetalle("intentos", 1);
             Invoke("TurnWrongCard", 1.5f);
         }
 
@@ -182,6 +191,7 @@ public class MemoriaGameManager : MonoBehaviour
         if (temporizadorPista.Avanzar(Time.deltaTime))
         {
             pistaActiva = true;
+            partida.Registro.RegistrarPista();
             ActualizarPista();
         }
     }
@@ -215,6 +225,7 @@ public class MemoriaGameManager : MonoBehaviour
  
     void Win()
     {
+        partida.Terminar(true);
         if (panelFin != null) panelFin.Mostrar();
     }
     // Update is called once per frame
