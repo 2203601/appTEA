@@ -60,6 +60,11 @@ public class GameManagerCompletar : MonoBehaviour
     int intentosFallidos;
     bool esperandoSiguiente;
 
+    // métricas de esta partida (un ítem = un casillero a completar)
+    SeguimientoDePartida partida;
+    int items;
+    int itemsPrimerIntento;
+
     void Awake()
     {
         Instancia = this;
@@ -112,6 +117,12 @@ public class GameManagerCompletar : MonoBehaviour
             return;
         }
         rondaActual = 0;
+
+        partida = SeguimientoDePartida.Iniciar(gameObject, IdsDeJuegos.Completar, GameSession.SelectedDifficulty);
+        partida.Registro.FijarDetalle("items", 0);
+        partida.Registro.FijarDetalle("items_primer_intento", 0);
+        partida.Registro.FijarDetalle("items_con_pista", 0);
+
         NuevaRonda();
     }
 
@@ -246,6 +257,7 @@ public class GameManagerCompletar : MonoBehaviour
         {
             if (feedbackText != null) feedbackText.text = FraseAlAzar(frasesCorrecto);
             if (personaje != null) personaje.SetTrigger(SonreirTrigger);
+            RegistrarItemCompletado();
             CompletarHueco();
             return;
         }
@@ -253,6 +265,14 @@ public class GameManagerCompletar : MonoBehaviour
         // Error solo visual: la opción se atenúa, sin texto ni sonido
         boton.Atenuar();
         intentosFallidos++;
+        partida.Registro.RegistrarError();
+
+        // La pista se cuenta una sola vez por ítem, cuando aparece
+        if (intentosFallidos == fallosParaPista)
+        {
+            partida.Registro.RegistrarPista();
+            partida.Registro.SumarDetalle("items_con_pista", 1);
+        }
 
         // Desde el segundo error la correcta late como pista; el chico la tiene que tocar
         if (intentosFallidos >= fallosParaPista)
@@ -260,6 +280,17 @@ public class GameManagerCompletar : MonoBehaviour
             foreach (var b in botones)
                 if (b.Caracter == ronda.CaracterEsperado) b.Resaltar();
         }
+    }
+
+    void RegistrarItemCompletado()
+    {
+        items++;
+        if (intentosFallidos == 0) itemsPrimerIntento++;
+
+        partida.Registro.RegistrarAcierto();
+        partida.Registro.FijarDetalle("items", items);
+        partida.Registro.FijarDetalle("items_primer_intento", itemsPrimerIntento);
+        partida.Registro.FijarDetalle("porcentaje_correctas", System.Math.Round(100.0 * itemsPrimerIntento / items, 1));
     }
 
     void CompletarHueco()
@@ -290,6 +321,7 @@ public class GameManagerCompletar : MonoBehaviour
 
     void TerminarJuego()
     {
+        partida.Terminar(true);
         LimpiarRonda();
         if (imagenPista != null) imagenPista.gameObject.SetActive(false);
         if (rondaText != null) rondaText.text = "";
