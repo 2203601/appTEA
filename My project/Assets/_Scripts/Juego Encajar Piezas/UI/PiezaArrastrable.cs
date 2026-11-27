@@ -5,7 +5,7 @@ using UnityEngine.UI;
 // Va en el prefab del emoji que el chico arrastra con el dedo/mouse.
 
 [RequireComponent(typeof(Image))]
-public class PiezaArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class PiezaArrastrable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public string PiezaNombre { get; private set; }
 
@@ -17,6 +17,8 @@ public class PiezaArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     Vector2 posicionOriginalLocal;
 
     public int IndicePieza { get; private set; } = -1;
+
+    float momentoToque;   // Time.time no avanza en pausa
 
 
     void Awake()
@@ -64,6 +66,11 @@ public class PiezaArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler, 
     }
 
 
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        momentoToque = Time.time;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin Drag");
@@ -98,6 +105,10 @@ public class PiezaArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler, 
         {
             VolverAPosicionOriginal();
         }
+
+        // OnDrop ya se ejecutó: el GameManager sabe si cayó sobre la silueta
+        if (GameManagerEncajar.Instancia != null)
+            GameManagerEncajar.Instancia.TerminarArrastre(this, Time.time - momentoToque);
     }
 
     public void VolverAPosicionOriginal()

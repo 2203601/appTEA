@@ -94,6 +94,13 @@ public class GameManagerEncajar : MonoBehaviour
     readonly System.Random azar = new System.Random();
     bool esperandoSiguienteRonda;
 
+    // métricas de esta partida
+    SeguimientoDePartida partida;
+    MetricasEncajar metricas;
+    PiezaArrastrable piezaSobreSilueta;   // la última que se soltó sobre la silueta
+    bool piezaSobreSiluetaEsCorrecta;
+    float momentoAgarre;                  // rompecabezas
+
     // animación del personaje
     public Animator personaje;
     public PanelFinJuego panelFin;          // cartel "¡Muy bien!" al terminar
@@ -135,6 +142,10 @@ public class GameManagerEncajar : MonoBehaviour
     {
         ConfigurarVista();
         rondaActual = 0;
+
+        partida = SeguimientoDePartida.Iniciar(gameObject, IdsDeJuegos.Encajar, GameSession.SelectedDifficulty);
+        metricas = new MetricasEncajar(partida.Registro);
+
         NuevaRonda();
     }
 
@@ -261,6 +272,8 @@ public class GameManagerEncajar : MonoBehaviour
 
         bool esCorrecta = piezaSoltada.PiezaNombre == piezaActual.piezaNombre;
         ResultadoRespuesta resultado = ronda.Responder(esCorrecta);
+        piezaSobreSilueta = piezaSoltada;
+        piezaSobreSiluetaEsCorrecta = esCorrecta;
 
         if (esCorrecta)
         {
@@ -289,6 +302,20 @@ public class GameManagerEncajar : MonoBehaviour
     }
 
 
+    // Fácil y Medio: lo llama cada pieza al terminar de arrastrarla
+    public void TerminarArrastre(PiezaArrastrable pieza, float segundos)
+    {
+        bool sobreSilueta = pieza == piezaSobreSilueta;
+        piezaSobreSilueta = null;
+
+        // Con la ronda ya resuelta solo cuenta el arrastre que la resolvió
+        if (!sobreSilueta && esperandoSiguienteRonda) return;
+
+        bool colocada = sobreSilueta && piezaSobreSiluetaEsCorrecta;
+        metricas.RegistrarArrastre(rondaActual, segundos, colocada,
+            sobreSilueta && !colocada, !sobreSilueta);
+    }
+
     void Update()
     {
         // En pausa (timeScale = 0) no avanza nada: ni la pista ni el arrastre del rompecabezas
@@ -313,7 +340,11 @@ public class GameManagerEncajar : MonoBehaviour
                 if (pieza.Colocada || !pieza.Contiene(punto)) continue;
                 if (piezaAgarrada == null || pieza.Orden > piezaAgarrada.Orden) piezaAgarrada = pieza;
             }
-            if (piezaAgarrada != null) piezaAgarrada.Agarrar(punto);
+            if (piezaAgarrada != null)
+            {
+                piezaAgarrada.Agarrar(punto);
+                momentoAgarre = Time.time;
+            }
         }
         else if (piezaAgarrada != null && puntero.press.isPressed)
         {
@@ -322,6 +353,8 @@ public class GameManagerEncajar : MonoBehaviour
         else if (piezaAgarrada != null)
         {
             bool encajo = piezaAgarrada.Soltar();
+            metricas.RegistrarArrastre(System.Array.IndexOf(piezasRompecabezas, piezaAgarrada),
+                Time.time - momentoAgarre, encajo, !encajo, !encajo);
             piezaAgarrada = null;
             if (encajo) NotificarPiezaRompecabezasColocada();
         }
@@ -391,6 +424,15 @@ public class GameManagerEncajar : MonoBehaviour
         }
 
         if (objetivo == null) return;
+
+        // La pista se cuenta cuando aparece, no si ya estaba brillando
+        if (objetivo != piezaConPista)
+        {
+            int item = GameSession.SelectedDifficulty == Difficulty.Dificil
+                ? System.Array.IndexOf(piezasRompecabezas, objetivo.GetComponent<PiezaRompecabezas>())
+                : rondaActual;
+            metricas.RegistrarPista(item);
+        }
         PistaBrillo.Activar(objetivo);
         piezaConPista = objetivo;
     }
@@ -418,6 +460,7 @@ public class GameManagerEncajar : MonoBehaviour
     }
     void TerminarJuego()
     {
+        partida.Terminar(true);
 
         foreach (var pieza in piezasActuales)
         {
